@@ -9,7 +9,7 @@ extends RigidBody2D
 
 # midcourse_thrust_magnitude should be ~0.1 and reserved for anti-missile missiles
 
-enum MissileState {BOOSTING, MIDCOURSE, TERMINAL, AQUISITION, DISARMED}
+enum MissileState {BOOSTING, MIDCOURSE, SEEKING, TERMINAL, DISARMED}
 
 var state = MissileState.BOOSTING
 
@@ -74,17 +74,25 @@ func _ready():
     print("global_position.x: " + str(global_position.x) + " | global_position.y:" + str(global_position.y))
     print("linear_velocity.x: " + str(linear_velocity.x) + " | linear_velocity.y:" + str(linear_velocity.y))
     print("----------------\n")
-    if total_thrust_time > 0:
-        boost_thrust_time = boost_thrust_time
-        terminal_thrust_time = total_thrust_time - boost_thrust_time
+    # if total_thrust_time > 0:
+    #     boost_thrust_time = boost_thrust_time
+    #     terminal_thrust_time = total_thrust_time - boost_thrust_time
     boost_thrust_timer.wait_time = boost_thrust_time
     boost_thrust_timer.one_shot = true
     add_child(boost_thrust_timer)
     boost_thrust_timer.start()
+    boost_thrust_timer.timeout.connect(_on_boost_thrust_timer_timeout)
 
     terminal_thrust_timer.wait_time = terminal_thrust_time
     terminal_thrust_timer.one_shot = true
     add_child(terminal_thrust_timer)
+    terminal_thrust_timer.timeout.connect(_on_terminal_thrust_timer_timeout)
+
+func _on_boost_thrust_timer_timeout():
+    state = MissileState.MIDCOURSE
+
+func _on_terminal_thrust_timer_timeout():
+    state = MissileState.DISARMED
 
 func _integrate_forces(_state):
     target = get_target()
@@ -95,37 +103,31 @@ func _integrate_forces(_state):
         MissileState.BOOSTING:
             is_boosting = true
             is_terminal = false
-            if not boost_thrust_timer.is_stopped():
-                applied_forces += get_closing_thrust(boost_thrust_magnitude, boost_thrust_timer.time_left)
-            else:
-                state = MissileState.MIDCOURSE
+            applied_forces += get_closing_thrust(boost_thrust_magnitude, boost_thrust_timer.time_left)
 
         MissileState.MIDCOURSE:
             is_boosting = false
             is_terminal = false
-            if midcourse_thrust_magnitude > 0:
+            if (target.global_position - global_position).length() < terminal_range:
+                state = MissileState.SEEKING
+            elif midcourse_thrust_magnitude > 0:
                 var prop_nav_acceleration = proportional_navigation()
                 var prop_nav_thrust = prop_nav_acceleration * self.mass
                 if prop_nav_thrust.length() > midcourse_thrust_magnitude:
                     prop_nav_thrust = prop_nav_thrust.normalized() * midcourse_thrust_magnitude
                     applied_forces += prop_nav_thrust
-            if (target.global_position - global_position).length() < terminal_range:
-                state = MissileState.TERMINAL
 
-        MissileState.TERMINAL:
+        MissileState.SEEKING:
             is_boosting = false
             is_terminal = true
             if approx_time_to_collision < terminal_thrust_time:
                 terminal_thrust_timer.start()
-                state = MissileState.AQUISITION
+                state = MissileState.TERMINAL
 
-        MissileState.AQUISITION:
+        MissileState.TERMINAL:
             is_boosting = true
             is_terminal = true
-            if not terminal_thrust_timer.is_stopped():
-                applied_forces += get_closing_thrust(terminal_thrust_magnitude, approx_time_to_collision)
-            else:
-                state = MissileState.DISARMED
+            applied_forces += get_closing_thrust(terminal_thrust_magnitude, approx_time_to_collision)
 
         MissileState.DISARMED:
             is_boosting = false
