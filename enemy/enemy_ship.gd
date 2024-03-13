@@ -2,7 +2,7 @@ extends RigidBody2D
 
 var set_initial_state = true
 
-var distance = 500
+var distance = 150
 var position_bearing = (270)
 var position_bearing_radian = deg_to_rad(position_bearing + 270)
 var initial_position = Vector2(distance * cos(position_bearing_radian), distance * sin(position_bearing_radian))

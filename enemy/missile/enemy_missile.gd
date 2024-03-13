@@ -1,29 +1,43 @@
 extends RigidBody2D
 
-# boost thrust should be on the order of deploying ship speed, all times should be ~1-3
+# boost_thrust_magnitude should be on order of relative velocity between launching platform and target
+# boost_thrust_time should be short to minimize visibility to target
+# for single stage missile boost_thrust_magnitude = terminal_thrust_magnitude
+    # make sure to assign enough boost_thrust_time to ensure intercept
+    # player will select boost and terminal thrust times from a total thrust time budget
+# missile difficulty is proportional to boost_thrust_magnitude * boost_thrust_time + terminal_thrust_magnitude * terminal_thrust_time
 
+# midcourse_thrust_magnitude should be ~0.1 and reserved for anti-missile missiles
 
-@onready var target = get_tree().get_first_node_in_group("player")
+var intended_target = "player"
+var valid_targets = ["player", "decoys"]
+
+@onready var target = get_tree().get_first_node_in_group(intended_target)
 @onready var approx_time_to_collision = (target.global_position - global_position).length() / (linear_velocity.length() + target.linear_velocity.length())
+
+var total_thrust_time = 0 # player missiles only
+
 var boost_thrust_magnitude = 3
 var boost_thrust_time = 3
 var midcourse_thrust_magnitude = 0
-var terminal_thrust_magnitude = 2
-var terminal_thrust_time = 5
+var terminal_thrust_magnitude = 3
+var terminal_thrust_time = 3
 var terminal_range = 200
+
 var is_boosting = false
 var is_terminal = false
 var armed = true
-var boost_timer := Timer.new()
-var terminal_timer := Timer.new()
 
+var boost_thrust_timer := Timer.new()
+var terminal_thrust_timer := Timer.new()
 
 func get_target():
-    target = get_tree().get_first_node_in_group("decoys")
-    if target != null:
-        return target
-    else:
-        return get_tree().get_first_node_in_group("player")
+    for valid_target in valid_targets:
+        if valid_target != intended_target:
+            target = get_tree().get_first_node_in_group(valid_target)
+            if target:
+                return target
+    return get_tree().get_first_node_in_group(intended_target)
 
 func proportional_navigation(proportionality_constant = 3):
     # https://en.wikipedia.org/wiki/Proportional_navigation
@@ -56,25 +70,42 @@ func _ready():
     print("global_position.x: " + str(global_position.x) + " | global_position.y:" + str(global_position.y))
     print("linear_velocity.x: " + str(linear_velocity.x) + " | linear_velocity.y:" + str(linear_velocity.y))
     print("----------------\n")
-    boost_timer.wait_time = boost_thrust_time
-    boost_timer.one_shot = true
-    add_child(boost_timer)
-    boost_timer.start()
+    if total_thrust_time > 0:
+        boost_thrust_time = boost_thrust_time
+        terminal_thrust_time = total_thrust_time - boost_thrust_time
+    boost_thrust_timer.wait_time = boost_thrust_time
+    boost_thrust_timer.one_shot = true
+    add_child(boost_thrust_timer)
+    boost_thrust_timer.start()
+
+    terminal_thrust_timer.wait_time = terminal_thrust_time
+    terminal_thrust_timer.one_shot = true
+    add_child(terminal_thrust_timer)
 
 func _integrate_forces(_state):
     target = get_target()
     # first order approximation, assumes constant velocity, assumption mostly holds for the short burn times and low acceleration
     approx_time_to_collision = (target.global_position - global_position).length() / (linear_velocity.length() + target.linear_velocity.length())
     var applied_forces = Vector2(0,0)
-    is_boosting = false
-    if not boost_timer.is_stopped():
+
+    # when launched, missile will boost towards target until boost_thrust_time is up
+    if not boost_thrust_timer.is_stopped():
         is_boosting = true
-        applied_forces += get_closing_thrust(boost_thrust_magnitude, boost_timer.time_left)
+        applied_forces += get_closing_thrust(boost_thrust_magnitude, boost_thrust_timer.time_left)
+
+    # when terminal range is reached, missile will engage its seeker
     elif (target.global_position - global_position).length() < terminal_range:
-        is_terminal = true
-        if approx_time_to_collision < terminal_thrust_time:
-            is_boosting = true
-            applied_forces += get_closing_thrust(terminal_thrust_magnitude, approx_time_to_collision)
+        is_terminal = true # missile will engage its seeker
+        if approx_time_to_collision < terminal_thrust_time: # missile terminal thrusters will fire when approx_time_to_collision is less than terminal_thrust_time
+            if is_boosting == false: # fire terminal thrusters if not already firing
+                terminal_thrust_timer.start()
+            if not terminal_thrust_timer.is_stopped(): # fire terminal thrusters until terminal_thrust_time is up
+                is_boosting = true
+                applied_forces += get_closing_thrust(terminal_thrust_magnitude, approx_time_to_collision)
+            else: 
+                is_boosting = false
+                terminal_thrust_time = 0
+
     elif midcourse_thrust_magnitude > 0:
         var prop_nav_acceleration = proportional_navigation()
         var prop_nav_thrust = prop_nav_acceleration * self.mass
@@ -85,7 +116,9 @@ func _integrate_forces(_state):
         if prop_nav_thrust.length() > 0:
             is_boosting = true
         applied_forces += prop_nav_thrust
+
     elif is_terminal:
+        is_boosting = false
         is_terminal = false
         armed = false
     apply_central_force(applied_forces)
