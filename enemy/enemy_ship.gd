@@ -7,7 +7,7 @@ var position_bearing = (270)
 var position_bearing_radian = deg_to_rad(position_bearing + 270)
 var initial_position = Vector2(distance * cos(position_bearing_radian), distance * sin(position_bearing_radian))
 
-var speed = 30
+var speed = 3
 var velocity_bearing = (60)
 var velocity_bearing_radian = deg_to_rad(velocity_bearing + 270)
 var initial_velocity = Vector2(speed * cos(velocity_bearing_radian), speed * sin(velocity_bearing_radian))
