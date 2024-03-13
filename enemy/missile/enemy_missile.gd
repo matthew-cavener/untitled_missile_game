@@ -45,11 +45,7 @@ func get_closing_thrust(stage_thrust, stage_time_remaining):
     var target_direction = global_position.direction_to(target.global_position)
     var stage_delta_v = (stage_thrust * stage_time_remaining) / self.mass
     var velocity_rejection = get_velocity_rejection()
-    print("velocity_rejection: " + str(velocity_rejection))
-    # ensure enough of the thrust is expended to cancel out the velocity rejection, using the rest to close the distance
-    # var velocity_rejection_coeff = velocity_rejection.length() / stage_delta_v
-    # print("velocity_rejection_coeff: " + str(velocity_rejection_coeff))
-    # var closing_thrust_direction = ((1 - velocity_rejection_coeff) * target_direction.normalized() - velocity_rejection_coeff * velocity_rejection.normalized()).normalized()
+    # ensure enough of the available thrust is expended to cancel out the velocity rejection, using the rest to close the distance
     var closing_thrust_direction = (stage_delta_v * target_direction.normalized() - velocity_rejection).normalized()
     var closing_thrust_magnitude = stage_thrust
     var closing_thrust = closing_thrust_direction * closing_thrust_magnitude
@@ -72,7 +68,7 @@ func _integrate_forces(_state):
     var applied_forces = Vector2(0,0)
     if not boost_timer.is_stopped():
         is_boosting = true
-        applied_forces += get_closing_thrust(boost_thrust_magnitude, boost_thrust_time)
+        applied_forces += get_closing_thrust(boost_thrust_magnitude, boost_timer.time_left)
         # apply_central_force(get_closing_thrust(boost_thrust_magnitude, boost_thrust_time))
     elif (target.global_position - global_position).length() < terminal_range:
         is_terminal = true
