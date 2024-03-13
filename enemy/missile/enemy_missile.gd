@@ -9,6 +9,10 @@ extends RigidBody2D
 
 # midcourse_thrust_magnitude should be ~0.1 and reserved for anti-missile missiles
 
+enum MissileState {BOOSTING, MIDCOURSE, TERMINAL, AQUISITION, DISARMED}
+
+var state = MissileState.BOOSTING
+
 var intended_target = "player"
 var valid_targets = ["player", "decoys"]
 
@@ -84,43 +88,50 @@ func _ready():
 
 func _integrate_forces(_state):
     target = get_target()
-    # first order approximation, assumes constant velocity, assumption mostly holds for the short burn times and low acceleration
     approx_time_to_collision = (target.global_position - global_position).length() / (linear_velocity.length() + target.linear_velocity.length())
     var applied_forces = Vector2(0,0)
 
-    # when launched, missile will boost towards target until boost_thrust_time is up
-    if not boost_thrust_timer.is_stopped():
-        is_boosting = true
-        applied_forces += get_closing_thrust(boost_thrust_magnitude, boost_thrust_timer.time_left)
-
-    # when terminal range is reached, missile will engage its seeker
-    elif (target.global_position - global_position).length() < terminal_range:
-        is_terminal = true # missile will engage its seeker
-        if approx_time_to_collision < terminal_thrust_time: # missile terminal thrusters will fire when approx_time_to_collision is less than terminal_thrust_time
-            if is_boosting == false: # fire terminal thrusters if not already firing
-                terminal_thrust_timer.start()
-            if not terminal_thrust_timer.is_stopped(): # fire terminal thrusters until terminal_thrust_time is up
-                is_boosting = true
-                applied_forces += get_closing_thrust(terminal_thrust_magnitude, approx_time_to_collision)
-            else: 
-                is_boosting = false
-                terminal_thrust_time = 0
-
-    elif midcourse_thrust_magnitude > 0:
-        var prop_nav_acceleration = proportional_navigation()
-        var prop_nav_thrust = prop_nav_acceleration * self.mass
-        if prop_nav_thrust.length() < 0.8 * midcourse_thrust_magnitude:
-            prop_nav_thrust = Vector2(0,0)
-        elif prop_nav_thrust.length() > midcourse_thrust_magnitude:
-            prop_nav_thrust = prop_nav_thrust.normalized() * midcourse_thrust_magnitude
-        if prop_nav_thrust.length() > 0:
+    match state:
+        MissileState.BOOSTING:
             is_boosting = true
-        applied_forces += prop_nav_thrust
+            is_terminal = false
+            if not boost_thrust_timer.is_stopped():
+                applied_forces += get_closing_thrust(boost_thrust_magnitude, boost_thrust_timer.time_left)
+            else:
+                state = MissileState.MIDCOURSE
 
-    elif is_terminal:
-        is_boosting = false
-        is_terminal = false
-        armed = false
+        MissileState.MIDCOURSE:
+            is_boosting = false
+            is_terminal = false
+            if midcourse_thrust_magnitude > 0:
+                var prop_nav_acceleration = proportional_navigation()
+                var prop_nav_thrust = prop_nav_acceleration * self.mass
+                if prop_nav_thrust.length() > midcourse_thrust_magnitude:
+                    prop_nav_thrust = prop_nav_thrust.normalized() * midcourse_thrust_magnitude
+                    applied_forces += prop_nav_thrust
+            if (target.global_position - global_position).length() < terminal_range:
+                state = MissileState.TERMINAL
+
+        MissileState.TERMINAL:
+            is_boosting = false
+            is_terminal = true
+            if approx_time_to_collision < terminal_thrust_time:
+                terminal_thrust_timer.start()
+                state = MissileState.AQUISITION
+
+        MissileState.AQUISITION:
+            is_boosting = true
+            is_terminal = true
+            if not terminal_thrust_timer.is_stopped():
+                applied_forces += get_closing_thrust(terminal_thrust_magnitude, approx_time_to_collision)
+            else:
+                state = MissileState.DISARMED
+
+        MissileState.DISARMED:
+            is_boosting = false
+            is_terminal = false
+            armed = false
+
     apply_central_force(applied_forces)
     print("\n----------------")
     print("target:" + str(target))
