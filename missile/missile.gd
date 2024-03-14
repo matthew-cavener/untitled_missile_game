@@ -13,32 +13,21 @@ extends RigidBody2D
 enum MissileState {BOOSTING, MIDCOURSE, SEEKING, TERMINAL, DISARMED}
 
 var state: MissileState = MissileState.BOOSTING
-
-var state_names = {
-    MissileState.BOOSTING: "BOOSTING",
-    MissileState.MIDCOURSE: "MIDCOURSE",
-    MissileState.SEEKING: "SEEKING",
-    MissileState.TERMINAL: "TERMINAL",
-    MissileState.DISARMED: "DISARMED"
-}
-
-func get_current_state_name() -> String:
-    return state_names[state]
+var state_name: String = "BOOSTING"
 
 var intended_target: String
 var valid_targets: Array
-
 @onready var target: Node = get_tree().get_first_node_in_group(intended_target)
 @onready var approx_time_to_collision: float = (target.global_position - global_position).length() / (linear_velocity.length() + target.linear_velocity.length())
 
 var total_thrust_time: int = 0 # player missiles only
-
 var boost_thrust_magnitude: float
 var boost_thrust_time: float
 var midcourse_thrust_magnitude: float
 var terminal_thrust_magnitude: float
 var terminal_thrust_time: float
-var terminal_range: int = 200
+var terminal_range: int
+var velocity_rejection_coefficient: float
 
 var boost_thrust_timer: Timer = Timer.new()
 var terminal_thrust_timer: Timer = Timer.new()
@@ -50,7 +39,9 @@ func _init(
     _boost_thrust_time: float = 3,
     _midcourse_thrust_magnitude: float = 0,
     _terminal_thrust_magnitude: float = 3,
-    _terminal_thrust_time: float = 3
+    _terminal_thrust_time: float = 3,
+    _terminal_range: int = 200,
+    _velocity_rejection_coefficient: float = 1.2,
 ) -> void:
     intended_target = _intended_target
     valid_targets = _valid_targets
@@ -59,6 +50,8 @@ func _init(
     midcourse_thrust_magnitude = _midcourse_thrust_magnitude
     terminal_thrust_magnitude = _terminal_thrust_magnitude
     terminal_thrust_time = _terminal_thrust_time
+    terminal_range = _terminal_range
+    velocity_rejection_coefficient = _velocity_rejection_coefficient
 
 func get_target() -> Node:
     for valid_target in valid_targets:
@@ -80,7 +73,7 @@ func proportional_navigation(proportionality_constant: int = 3) -> Vector2:
 
 func get_closing_thrust(stage_thrust: float, stage_time_remaining: float) -> Vector2:
     # https://en.wikipedia.org/wiki/Vector_projection#Vector_projection_2
-    # create thrust vector to intercept target by minimizing orthogonal velocity
+    # create thrust vector to intercept target by reducing orthogonal velocity and increasing parallel velocity
     # first order approximation, assumes constant velocity, assumption mostly holds for the short burn times and low acceleration
     var intercept_position: Vector2 = target.global_position + target.linear_velocity * approx_time_to_collision
     var intercept_direction: Vector2 = global_position.direction_to(intercept_position)
@@ -88,7 +81,7 @@ func get_closing_thrust(stage_thrust: float, stage_time_remaining: float) -> Vec
     var stage_delta_v: float = (stage_thrust * stage_time_remaining) / self.mass
     var velocity_vector_projection: Vector2 = linear_velocity.dot(intercept_direction_unit) * intercept_direction_unit
     var velocity_vector_rejection: Vector2 = linear_velocity - velocity_vector_projection
-    var closing_thrust_direction: Vector2 = (stage_delta_v * intercept_direction_unit - velocity_vector_rejection).normalized()
+    var closing_thrust_direction: Vector2 = (stage_delta_v * intercept_direction_unit - velocity_rejection_coefficient * velocity_vector_rejection).normalized()
     var closing_thrust_magnitude: float = stage_thrust
     var closing_thrust: Vector2 = closing_thrust_direction * closing_thrust_magnitude
     return closing_thrust
@@ -118,9 +111,11 @@ func _integrate_forces(_state) -> void:
 
     match state:
         MissileState.BOOSTING:
+            state_name = "BOOSTING"
             applied_forces += get_closing_thrust(boost_thrust_magnitude, boost_thrust_timer.time_left)
 
         MissileState.MIDCOURSE:
+            state_name = "MIDCOURSE"
             if (target.global_position - global_position).length() < terminal_range:
                 state = MissileState.SEEKING
             elif midcourse_thrust_magnitude > 0:
@@ -131,14 +126,17 @@ func _integrate_forces(_state) -> void:
                     applied_forces += prop_nav_thrust
 
         MissileState.SEEKING:
+            state_name = "SEEKING"
             if approx_time_to_collision < terminal_thrust_time:
                 terminal_thrust_timer.start()
                 state = MissileState.TERMINAL
 
         MissileState.TERMINAL:
+            state_name = "TERMINAL"
             applied_forces += get_closing_thrust(terminal_thrust_magnitude, approx_time_to_collision)
 
         MissileState.DISARMED:
+            state_name = "DISARMED"
             pass
 
     apply_central_force(applied_forces)
@@ -146,7 +144,7 @@ func _integrate_forces(_state) -> void:
     print("target:" + str(target))
     print("global_position.x: " + str(global_position.x) + " | global_position.y:" + str(global_position.y))
     print("linear_velocity.x: " + str(linear_velocity.x) + " | linear_velocity.y:" + str(linear_velocity.y))
-    print("state: " + str(get_current_state_name()))
+    print("state: " + str(state_name))
     print("approx_time_to_collision: " + str(approx_time_to_collision) + " seconds")
     print("missile force applied: " + str(applied_forces))
     print("missile force magnitude: " + str(applied_forces.length()))
