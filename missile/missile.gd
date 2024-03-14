@@ -1,5 +1,3 @@
-extends RigidBody2D
-
 # boost_thrust_magnitude should be on order of relative velocity between launching platform and target
 # boost_thrust_time should be short to minimize visibility to target
 # for single stage missile boost_thrust_magnitude = terminal_thrust_magnitude
@@ -9,23 +7,26 @@ extends RigidBody2D
 
 # midcourse_thrust_magnitude should be ~0.1 and reserved for anti-missile missiles
 
+class_name Missile
+extends RigidBody2D
+
 enum MissileState {BOOSTING, MIDCOURSE, SEEKING, TERMINAL, DISARMED}
 
 var state = MissileState.BOOSTING
 
-var intended_target = "player"
-var valid_targets = ["player", "decoys"]
+var intended_target
+var valid_targets
 
 @onready var target = get_tree().get_first_node_in_group(intended_target)
 @onready var approx_time_to_collision = (target.global_position - global_position).length() / (linear_velocity.length() + target.linear_velocity.length())
 
 var total_thrust_time = 0 # player missiles only
 
-var boost_thrust_magnitude = 3
-var boost_thrust_time = 3
-var midcourse_thrust_magnitude = 0
-var terminal_thrust_magnitude = 3
-var terminal_thrust_time = 3
+var boost_thrust_magnitude
+var boost_thrust_time
+var midcourse_thrust_magnitude
+var terminal_thrust_magnitude
+var terminal_thrust_time
 var terminal_range = 200
 
 var is_boosting = false
@@ -34,6 +35,23 @@ var armed = true
 
 var boost_thrust_timer := Timer.new()
 var terminal_thrust_timer := Timer.new()
+
+func _init(
+    _intended_target = "player",
+    _valid_targets = ["decoys", "player"],
+    _boost_thrust_magnitude = 3,
+    _boost_thrust_time = 3,
+    _midcourse_thrust_magnitude = 0,
+    _terminal_thrust_magnitude = 3,
+    _terminal_thrust_time = 3
+):
+    intended_target = _intended_target
+    valid_targets = _valid_targets
+    boost_thrust_magnitude = _boost_thrust_magnitude
+    boost_thrust_time = _boost_thrust_time
+    midcourse_thrust_magnitude = _midcourse_thrust_magnitude
+    terminal_thrust_magnitude = _terminal_thrust_magnitude
+    terminal_thrust_time = _terminal_thrust_time
 
 func get_target():
     for valid_target in valid_targets:
@@ -70,7 +88,7 @@ func get_closing_thrust(stage_thrust, stage_time_remaining):
 
 func _ready():
     print("\n----------------")
-    print("enemy missile spwaned")
+    print("missile spwaned")
     print("global_position.x: " + str(global_position.x) + " | global_position.y:" + str(global_position.y))
     print("linear_velocity.x: " + str(linear_velocity.x) + " | linear_velocity.y:" + str(linear_velocity.y))
     print("----------------\n")
@@ -142,6 +160,6 @@ func _integrate_forces(_state):
     print("is_boosting:" + str(is_boosting))
     print("is_terminal:" + str(is_terminal))
     print("approx_time_to_collision: " + str(approx_time_to_collision) + " seconds")
-    print("enemy missile force applied: " + str(applied_forces))
-    print("enemy missile force magnitude: " + str(applied_forces.length()))
+    print("missile force applied: " + str(applied_forces))
+    print("missile force magnitude: " + str(applied_forces.length()))
     print("----------------\n")

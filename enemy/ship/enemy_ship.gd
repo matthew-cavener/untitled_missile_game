@@ -12,7 +12,7 @@ var velocity_bearing = (60)
 var velocity_bearing_radian = deg_to_rad(velocity_bearing + 270)
 var initial_velocity = Vector2(speed * cos(velocity_bearing_radian), speed * sin(velocity_bearing_radian))
 
-var enemy_missile_scene = preload("res://enemy/missile/enemy_missile.tscn")
+var enemy_missile_scene = preload("res://missile/missile.tscn")
 
 func _ready():
     print("\n----------------")
