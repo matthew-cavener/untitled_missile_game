@@ -38,7 +38,7 @@ func _init(
     _boost_thrust_magnitude: float = 3,
     _boost_thrust_time: float = 3,
     _midcourse_thrust_magnitude: float = 0,
-    _terminal_thrust_magnitude: float = 3,
+    _terminal_thrust_magnitude: float = 1,
     _terminal_thrust_time: float = 3,
     _terminal_range: int = 200,
     _velocity_rejection_coefficient: float = 1.2,
