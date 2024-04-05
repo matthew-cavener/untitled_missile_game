@@ -1,3 +1,5 @@
+class_name Missile
+extends RigidBody2D
 # boost_thrust_magnitude * boost_thrust_time should be on order of relative velocity between launching platform and target to ensure enough delta_v is available to cancel orthogonal velocity
 # boost_thrust_time should be short to minimize visibility to target
 # for single stage missile boost_thrust_magnitude = terminal_thrust_magnitude
@@ -7,61 +9,52 @@
 
 # maneuvering_thrust_magnitude should be <1 and reserved for anti-missile missiles
 
-class_name Missile
-extends RigidBody2D
-
 enum MissileState {STOWED, BOOSTING, MIDCOURSE, SEEKING, TERMINAL, DISARMED}
 
 var missile_state: MissileState = MissileState.STOWED
 var state_name: String = "STOWED"
 
-var stowed_time: float
+var stowed_time: float = 3
 
-var intended_target: String
-var valid_targets: Array
+var group: String = "enemy_missiles"
+var intended_target: String = "player"
+var valid_targets: Array = ["decoys", "player"]
 @onready var target: Node = get_tree().get_first_node_in_group(intended_target)
-@onready var approx_time_to_collision: float = (target.global_position - global_position).length() / (linear_velocity.length() + target.linear_velocity.length())
+@onready var approx_time_to_collision: float = 30.0
 
-var passive_emission : float
-var detection_distance : float
+var passive_emission: float = 1.0
+var detection_distance : int = 200
 
-var total_thrust_time: int
-var boost_thrust_magnitude: float
-var boost_thrust_time: float
-var maneuvering_thrust_magnitude: float
-var terminal_thrust_magnitude: float
-var terminal_thrust_time: float
-var terminal_range: int
-var velocity_rejection_coefficient: float
+var total_thrust_time: float = 0.0
+var boost_thrust_magnitude: float = 3.0
+var boost_thrust_time: float = 3.0
+var maneuvering_thrust_magnitude: float = 0.0
+var terminal_thrust_magnitude: float = 1.0
+var terminal_thrust_time: float = 3.0
+var seeker_range: int = 200
+var velocity_rejection_coefficient: float = 1.2
 
 var boost_thrust_timer: Timer = Timer.new()
 var terminal_thrust_timer: Timer = Timer.new()
 var stowed_timer = Timer.new()
 
-func _init(
-    _intended_target: String = "player",
-    _valid_targets: Array = ["decoys", "player"],
-    _total_thrust_time: int = 0,
-    _boost_thrust_magnitude: float = 3,
-    _boost_thrust_time: float = 3,
-    _maneuvering_thrust_magnitude: float = 0.1,
-    _terminal_thrust_magnitude: float = 1,
-    _terminal_thrust_time: float = 3,
-    _terminal_range: int = 200,
-    _velocity_rejection_coefficient: float = 1.2,
-    _stowed_time: float = 3
-) -> void:
-    intended_target = _intended_target
-    valid_targets = _valid_targets
-    total_thrust_time = _total_thrust_time
-    boost_thrust_magnitude = _boost_thrust_magnitude
-    boost_thrust_time = _boost_thrust_time
-    maneuvering_thrust_magnitude = _maneuvering_thrust_magnitude
-    terminal_thrust_magnitude = _terminal_thrust_magnitude
-    terminal_thrust_time = _terminal_thrust_time
-    terminal_range = _terminal_range
-    velocity_rejection_coefficient = _velocity_rejection_coefficient
-    stowed_time = _stowed_time
+func _ready() -> void:
+    add_to_group(group)
+    stowed_timer.wait_time = stowed_time
+    stowed_timer.one_shot = true
+    add_child(stowed_timer)
+    stowed_timer.timeout.connect(_on_stowed_timer_timeout)
+    stowed_timer.start()
+
+    boost_thrust_timer.wait_time = boost_thrust_time
+    boost_thrust_timer.one_shot = true
+    add_child(boost_thrust_timer)
+    boost_thrust_timer.timeout.connect(_on_boost_thrust_timer_timeout)
+
+    terminal_thrust_timer.wait_time = terminal_thrust_time
+    terminal_thrust_timer.one_shot = true
+    add_child(terminal_thrust_timer)
+    terminal_thrust_timer.timeout.connect(_on_terminal_thrust_timer_timeout)
 
 func get_target() -> Node:
     for valid_target in valid_targets:
@@ -72,6 +65,8 @@ func get_target() -> Node:
     return get_tree().get_first_node_in_group(intended_target)
 
 func proportional_navigation(proportionality_constant: int = 3) -> Vector2:
+    if not target:
+        return Vector2.ZERO
     # https://en.wikipedia.org/wiki/Proportional_navigation
     var relative_velocity2: Vector2 = target.linear_velocity - linear_velocity
     var target_range2: Vector2 = target.global_position - global_position
@@ -82,6 +77,8 @@ func proportional_navigation(proportionality_constant: int = 3) -> Vector2:
     return Vector2(acceleration_commanded.x, acceleration_commanded.y)
 
 func get_closing_thrust(stage_thrust: float, stage_time_remaining: float) -> Vector2:
+    if not target:
+        return Vector2.ZERO
     # https://en.wikipedia.org/wiki/Vector_projection#Vector_projection_2
     # create thrust vector to intercept target by reducing orthogonal velocity and increasing parallel velocity
     # first order approximation, assumes constant velocity, assumption mostly holds for the short burn times and low acceleration
@@ -106,23 +103,6 @@ func _on_boost_thrust_timer_timeout() -> void:
 func _on_terminal_thrust_timer_timeout() -> void:
     missile_state = MissileState.DISARMED
 
-func _ready() -> void:
-    stowed_timer.wait_time = stowed_time
-    stowed_timer.one_shot = true
-    add_child(stowed_timer)
-    stowed_timer.start()
-    stowed_timer.timeout.connect(_on_stowed_timer_timeout)
-
-    boost_thrust_timer.wait_time = boost_thrust_time
-    boost_thrust_timer.one_shot = true
-    add_child(boost_thrust_timer)
-    boost_thrust_timer.timeout.connect(_on_boost_thrust_timer_timeout)
-
-    terminal_thrust_timer.wait_time = terminal_thrust_time
-    terminal_thrust_timer.one_shot = true
-    add_child(terminal_thrust_timer)
-    terminal_thrust_timer.timeout.connect(_on_terminal_thrust_timer_timeout)
-
 func _integrate_forces(_state) -> void:
     var applied_forces: Vector2 = Vector2.ZERO
     target = get_target()
@@ -139,12 +119,12 @@ func _integrate_forces(_state) -> void:
 
         MissileState.MIDCOURSE:
             state_name = "MIDCOURSE"
-            if (target.global_position - global_position).length() < terminal_range:
+            if (target.global_position - global_position).length() <= seeker_range:
                 missile_state = MissileState.SEEKING
 
         MissileState.SEEKING:
             state_name = "SEEKING"
-            if approx_time_to_collision < terminal_thrust_time:
+            if approx_time_to_collision <= terminal_thrust_time:
                 terminal_thrust_timer.start()
                 missile_state = MissileState.TERMINAL
             elif maneuvering_thrust_magnitude > 0:

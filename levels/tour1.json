@@ -2,40 +2,6 @@
     "incident report": "",
     "ships": [
         {
-            "distance": 150,
-            "position_bearing": 90,
-            "speed": 3,
-            "velocity_bearing": 60,
-            "passive_emission": 1,
-            "detection_distance": 200,
-            "missiles": [
-                {
-                    "intended_target": "player",
-                    "valid_targets": ["decoys", "player"],
-                    "boost_thrust_magnitude": 3,
-                    "boost_thrust_time": 3,
-                    "maneuvering_thrust_magnitude": 0,
-                    "terminal_thrust_magnitude": 1,
-                    "terminal_thrust_time": 3,
-                    "terminal_range": 200,
-                    "velocity_rejection_coefficient": 1.2,
-                    "stowed_time": 0
-                },
-                {
-                    "intended_target": "player",
-                    "valid_targets": ["decoys", "player"],
-                    "boost_thrust_magnitude": 3,
-                    "boost_thrust_time": 3,
-                    "maneuvering_thrust_magnitude": 0,
-                    "terminal_thrust_magnitude": 1,
-                    "terminal_thrust_time": 3,
-                    "terminal_range": 200,
-                    "velocity_rejection_coefficient": 1.2,
-                    "stowed_time": 2
-                }
-            ]
-        },
-        {
             "distance": 200,
             "position_bearing": 80,
             "speed": 4,
@@ -46,14 +12,14 @@
                 {
                     "intended_target": "player",
                     "valid_targets": ["decoys", "player"],
+                    "stowed_time": 0,
                     "boost_thrust_magnitude": 3,
                     "boost_thrust_time": 3,
                     "maneuvering_thrust_magnitude": 0,
                     "terminal_thrust_magnitude": 1,
                     "terminal_thrust_time": 3,
                     "terminal_range": 200,
-                    "velocity_rejection_coefficient": 1.2,
-                    "stowed_time": 0
+                    "velocity_rejection_coefficient": 1.2
                 }
             ]
         }

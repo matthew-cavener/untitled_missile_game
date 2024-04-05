@@ -5,38 +5,40 @@ var set_initial_state = true
 var enemy_missile_scene = preload("res://missile/missile.tscn")
 var enemy_missile = enemy_missile_scene.instantiate()
 
-var distance : float
-var position_bearing : float
-var initial_position : Vector2
-var speed : float
-var velocity_bearing : float
-var initial_velocity : Vector2
+var distance: float = 400
+var position_bearing: float = 270
+var position_bearing_rad: float = deg_to_rad(position_bearing + 270)
+var initial_position: Vector2 = Vector2(distance * cos(position_bearing_rad), distance * sin(position_bearing_rad))
+var speed: float = 3
+var velocity_bearing: float = 60
+var velocity_bearing_rad: float = deg_to_rad(velocity_bearing + 270)
+var initial_velocity: Vector2 = Vector2(speed * cos(velocity_bearing_rad), speed * sin(velocity_bearing_rad))
 
-var passive_emission : float
-var detection_distance : float
+var passive_emission: float = 1
+var detection_distance: float = 200
 
-# var missiles: Array[Missile]
+var missiles: Array[Missile] = []
 
-func _init(
-    _distance : float = 150,
-    _position_bearing : float = 270,
-    _velocity_bearing : float = 60,
-    _speed : float = 3,
-    _passive_emission : float = 0.5,
-    _detection_distance : float = 200
-
-
-) -> void:
-    distance = _distance
-    position_bearing = _position_bearing
-    position_bearing = deg_to_rad(position_bearing + 270)
-    initial_position = Vector2(distance * cos(position_bearing), distance * sin(position_bearing))
-    velocity_bearing = _velocity_bearing
-    speed = _speed
-    velocity_bearing = deg_to_rad(velocity_bearing + 270)
-    initial_velocity = Vector2(speed * cos(velocity_bearing), speed * sin(velocity_bearing))
-    passive_emission = _passive_emission
-    detection_distance = _detection_distance
+# func _init(
+#     _distance: float = 150,
+#     _position_bearing: float = 270,
+#     _velocity_bearing: float = 60,
+#     _speed: float = 3,
+#     _passive_emission: float = 0.5,
+#     _detection_distance: float = 200,
+#     _missiles: Array[Missile] = []
+# ) -> void:
+#     distance = _distance
+#     position_bearing = _position_bearing
+#     position_bearing = deg_to_rad(position_bearing + 270)
+#     initial_position = Vector2(distance * cos(position_bearing), distance * sin(position_bearing))
+#     velocity_bearing = _velocity_bearing
+#     speed = _speed
+#     velocity_bearing = deg_to_rad(velocity_bearing + 270)
+#     initial_velocity = Vector2(speed * cos(velocity_bearing), speed * sin(velocity_bearing))
+#     passive_emission = _passive_emission
+#     detection_distance = _detection_distance
+#     missiles = _missiles
 
 func _ready() -> void:
     pass
