@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://bt7h7c4hbu2gf"]
+
+[ext_resource type="Script" path="res://missile/missile.gd" id="1_4x3j5"]
+[ext_resource type="Texture2D" uid="uid://c8y1tv2locndd" path="res://assets/visual/Circle.png" id="2_4g1kl"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_kg4c1"]
+radius = 8.0
+
+[node name="EnemyMissile" type="RigidBody2D"]
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("1_4x3j5")
+
+[node name="EnemyMissileSprite" type="Sprite2D" parent="."]
+modulate = Color(1, 0, 0, 1)
+scale = Vector2(0.03125, 0.03125)
+texture = ExtResource("2_4g1kl")
+
+[node name="MissileArea" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 11
+
+[node name="MissileCollision" type="CollisionShape2D" parent="MissileArea"]
+shape = SubResource("CircleShape2D_kg4c1")

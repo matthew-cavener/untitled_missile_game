@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://bb6g7w1ru1jr4"]
+
+[ext_resource type="Texture2D" uid="uid://c8y1tv2locndd" path="res://assets/visual/Circle.png" id="1_cytsw"]
+[ext_resource type="Script" path="res://player/ship/player_ship.gd" id="1_hdatc"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_u73nl"]
+radius = 8.0
+
+[node name="PlayerShip" type="RigidBody2D" groups=["player"]]
+script = ExtResource("1_hdatc")
+
+[node name="PlayerShipSprite" type="Sprite2D" parent="."]
+modulate = Color(0, 0, 1, 1)
+scale = Vector2(0.03125, 0.03125)
+texture = ExtResource("1_cytsw")
+
+[node name="PlayerCamera" type="Camera2D" parent="."]
+
+[node name="ShipArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 0
+
+[node name="ShipCollisionArea" type="CollisionShape2D" parent="ShipArea"]
+shape = SubResource("CircleShape2D_u73nl")
