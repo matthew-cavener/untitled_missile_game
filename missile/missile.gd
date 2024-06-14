@@ -106,7 +106,13 @@ func _on_terminal_thrust_timer_timeout() -> void:
 func _integrate_forces(_state) -> void:
     var applied_forces: Vector2 = Vector2.ZERO
     target = get_target()
-    approx_time_to_collision = (target.global_position - global_position).length() / (linear_velocity.length() + target.linear_velocity.length())
+    var distance_to_target = (target.global_position - global_position).length()
+    approx_time_to_collision = distance_to_target / (linear_velocity.length() + target.linear_velocity.length())
+
+    # handle collision with target
+    if distance_to_target <= 3:
+        target.queue_free()
+        queue_free()
 
     match missile_state:
         MissileState.STOWED:
