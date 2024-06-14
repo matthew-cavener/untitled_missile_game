@@ -19,26 +19,18 @@ var detection_distance: float = 200
 
 var missiles: Array[Missile] = []
 
-# func _init(
-#     _distance: float = 150,
-#     _position_bearing: float = 270,
-#     _velocity_bearing: float = 60,
-#     _speed: float = 3,
-#     _passive_emission: float = 0.5,
-#     _detection_distance: float = 200,
-#     _missiles: Array[Missile] = []
-# ) -> void:
-#     distance = _distance
-#     position_bearing = _position_bearing
+# func _init(params: Dictionary) -> void:
+#     distance = params.get("distance", 150)
+#     position_bearing = params.get("position_bearing", 270)
 #     position_bearing = deg_to_rad(position_bearing + 270)
 #     initial_position = Vector2(distance * cos(position_bearing), distance * sin(position_bearing))
-#     velocity_bearing = _velocity_bearing
-#     speed = _speed
+#     velocity_bearing = params.get("velocity_bearing", 60)
+#     speed = params.get("speed", 3)
 #     velocity_bearing = deg_to_rad(velocity_bearing + 270)
 #     initial_velocity = Vector2(speed * cos(velocity_bearing), speed * sin(velocity_bearing))
-#     passive_emission = _passive_emission
-#     detection_distance = _detection_distance
-#     missiles = _missiles
+#     passive_emission = params.get("passive_emission", 0.5)
+#     detection_distance = params.get("detection_distance", 200)
+#     missiles = params.get("missiles", [])
 
 func _ready() -> void:
     pass
@@ -48,6 +40,7 @@ func _integrate_forces(state) -> void:
         state.transform = Transform2D(0.0, initial_position)
         self.linear_velocity = initial_velocity
         enemy_missile.linear_velocity = self.linear_velocity
+        enemy_missile.set_parameters()
         add_child(enemy_missile)
         set_initial_state = false
 

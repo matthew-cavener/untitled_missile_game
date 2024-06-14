@@ -14,47 +14,54 @@ enum MissileState {STOWED, BOOSTING, MIDCOURSE, SEEKING, TERMINAL, DISARMED}
 var missile_state: MissileState = MissileState.STOWED
 var state_name: String = "STOWED"
 
-var stowed_time: float = 3
+var stowed_time: float
 
-var group: String = "enemy_missiles"
-var intended_target: String = "player"
-var valid_targets: Array = ["decoys", "player"]
+var group: String
+var intended_target: String
+var valid_targets: Array
 @onready var target: Node = get_tree().get_first_node_in_group(intended_target)
 @onready var approx_time_to_collision: float = 30.0
 
-var passive_emission: float = 1.0
-var detection_distance : int = 200
+var total_thrust_time: float
+var boost_thrust_magnitude: float
+var boost_thrust_time: float
+var maneuvering_thrust_magnitude: float
+var terminal_thrust_magnitude: float
+var terminal_thrust_time: float
+var seeker_range: int
+var velocity_rejection_coefficient: float
 
-var total_thrust_time: float = 0.0
-var boost_thrust_magnitude: float = 3.0
-var boost_thrust_time: float = 3.0
-var maneuvering_thrust_magnitude: float = 0.0
-var terminal_thrust_magnitude: float = 1.0
-var terminal_thrust_time: float = 3.0
-var seeker_range: int = 200
-var velocity_rejection_coefficient: float = 1.2
-
+var stowed_timer = Timer.new()
 var boost_thrust_timer: Timer = Timer.new()
 var terminal_thrust_timer: Timer = Timer.new()
-var stowed_timer = Timer.new()
+
+
+func set_parameters(parameters: Dictionary = {}) -> void:
+    stowed_time = parameters.get("stowed_time", 3)
+    group = parameters.get("group", "enemy_missiles")
+    intended_target = parameters.get("intended_target", "player")
+    valid_targets = parameters.get("valid_targets", ["decoys", "player"])
+    total_thrust_time = parameters.get("total_thrust_time", 0.0)
+    boost_thrust_magnitude = parameters.get("boost_thrust_magnitude", 3.0)
+    boost_thrust_time = parameters.get("boost_thrust_time", 3.0)
+    maneuvering_thrust_magnitude = parameters.get("maneuvering_thrust_magnitude", 0.0)
+    terminal_thrust_magnitude = parameters.get("terminal_thrust_magnitude", 1.0)
+    terminal_thrust_time = parameters.get("terminal_thrust_time", 3.0)
+    seeker_range = parameters.get("seeker_range", 200)
+    velocity_rejection_coefficient = parameters.get("velocity_rejection_coefficient", 1.2)
+
+func setup_timer(timer: Timer, wait_time: float, timeout_func) -> void:
+    timer.wait_time = wait_time
+    timer.one_shot = true
+    add_child(timer)
+    timer.timeout.connect(timeout_func)
 
 func _ready() -> void:
     add_to_group(group)
-    stowed_timer.wait_time = stowed_time
-    stowed_timer.one_shot = true
-    add_child(stowed_timer)
-    stowed_timer.timeout.connect(_on_stowed_timer_timeout)
+    setup_timer(stowed_timer, stowed_time, _on_stowed_timer_timeout)
+    setup_timer(boost_thrust_timer, boost_thrust_time, _on_boost_thrust_timer_timeout)
+    setup_timer(terminal_thrust_timer, terminal_thrust_time, _on_terminal_thrust_timer_timeout)
     stowed_timer.start()
-
-    boost_thrust_timer.wait_time = boost_thrust_time
-    boost_thrust_timer.one_shot = true
-    add_child(boost_thrust_timer)
-    boost_thrust_timer.timeout.connect(_on_boost_thrust_timer_timeout)
-
-    terminal_thrust_timer.wait_time = terminal_thrust_time
-    terminal_thrust_timer.one_shot = true
-    add_child(terminal_thrust_timer)
-    terminal_thrust_timer.timeout.connect(_on_terminal_thrust_timer_timeout)
 
 func get_target() -> Node:
     for valid_target in valid_targets:
