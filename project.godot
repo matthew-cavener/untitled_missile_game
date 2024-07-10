@@ -27,8 +27,7 @@ animation_library={
 2d_physics/layer_3="enemy-ships"
 2d_physics/layer_4="player-missiles"
 2d_physics/layer_5="enemy-missiles"
-2d_physics/layer_6="chaff"
-2d_physics/layer_7="flare"
+2d_physics/layer_6="decoys"
 
 [physics]
 
