@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://d2d6qt3dj5ysj"]
+
+[ext_resource type="Script" path="res://decoy/decoy.gd" id="1_w8b77"]
+[ext_resource type="Texture2D" uid="uid://dpgaft0pmvq1r" path="res://assets/visual/Hexagon.png" id="2_n2e4m"]
+
+[node name="Decoy" type="RigidBody2D"]
+script = ExtResource("1_w8b77")
+
+[node name="DecoySprite" type="Sprite2D" parent="."]
+scale = Vector2(0.031, 0.031)
+texture = ExtResource("2_n2e4m")

@@ -13,7 +13,6 @@ var missile_parameters = {
 }
 
 
-# Called when the node enters the scene tree for the first time.
 func _ready():
     print("\n----------------")
     print("player ship spwaned")
@@ -25,4 +24,3 @@ func _integrate_forces(state) -> void:
         missile.set_parameters(missile_parameters)
         add_child(missile)
         set_initial_state = false
-
