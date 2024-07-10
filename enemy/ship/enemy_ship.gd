@@ -5,32 +5,31 @@ var set_initial_state = true
 var enemy_missile_scene = preload("res://missile/missile.tscn")
 var enemy_missile = enemy_missile_scene.instantiate()
 
-var distance: float = 400
-var position_bearing: float = 270
-var position_bearing_rad: float = deg_to_rad(position_bearing + 270)
-var initial_position: Vector2 = Vector2(distance * cos(position_bearing_rad), distance * sin(position_bearing_rad))
-var speed: float = 3
-var velocity_bearing: float = 60
-var velocity_bearing_rad: float = deg_to_rad(velocity_bearing + 270)
-var initial_velocity: Vector2 = Vector2(speed * cos(velocity_bearing_rad), speed * sin(velocity_bearing_rad))
+var distance: float
+var position_bearing: float
+var position_bearing_rad: float
+var initial_position: Vector2
+var speed: float
+var velocity_bearing: float
+var velocity_bearing_rad: float
+var initial_velocity: Vector2
 
 var passive_emission: float = 1
 var detection_distance: float = 200
 
 var missiles: Array[Missile] = []
 
-# func _init(params: Dictionary) -> void:
-#     distance = params.get("distance", 150)
-#     position_bearing = params.get("position_bearing", 270)
-#     position_bearing = deg_to_rad(position_bearing + 270)
-#     initial_position = Vector2(distance * cos(position_bearing), distance * sin(position_bearing))
-#     velocity_bearing = params.get("velocity_bearing", 60)
-#     speed = params.get("speed", 3)
-#     velocity_bearing = deg_to_rad(velocity_bearing + 270)
-#     initial_velocity = Vector2(speed * cos(velocity_bearing), speed * sin(velocity_bearing))
-#     passive_emission = params.get("passive_emission", 0.5)
-#     detection_distance = params.get("detection_distance", 200)
-#     missiles = params.get("missiles", [])
+func set_parameters(parameters: Dictionary = {}) -> void:
+    distance = parameters.get("distance", 400)
+    position_bearing = parameters.get("position_bearing", 270)
+    position_bearing_rad = deg_to_rad(position_bearing + 270)
+    initial_position = Vector2(distance * cos(position_bearing_rad), distance * sin(position_bearing_rad))
+    speed = parameters.get("speed", 3)
+    velocity_bearing = parameters.get("velocity_bearing", 60)
+    velocity_bearing_rad = deg_to_rad(velocity_bearing + 270)
+    initial_velocity = Vector2(speed * cos(velocity_bearing_rad), speed * sin(velocity_bearing_rad))
+    passive_emission = parameters.get("passive_emission", 1)
+    detection_distance = parameters.get("detection_distance", 200)
 
 func _ready() -> void:
     pass

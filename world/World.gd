@@ -4,6 +4,7 @@ var enemy_ship_scene = preload("res://enemy/ship/enemy_ship.tscn")
 # Called when the node enters the scene tree for the first time.
 func _ready():
     var enemy_ship = enemy_ship_scene.instantiate()
+    enemy_ship.set_parameters()
     add_child(enemy_ship)
 
 

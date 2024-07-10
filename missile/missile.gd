@@ -72,9 +72,9 @@ func get_target() -> Node:
     return get_tree().get_first_node_in_group(intended_target)
 
 func proportional_navigation(proportionality_constant: int = 3) -> Vector2:
+    # https://en.wikipedia.org/wiki/Proportional_navigation
     if not target:
         return Vector2.ZERO
-    # https://en.wikipedia.org/wiki/Proportional_navigation
     var relative_velocity2: Vector2 = target.linear_velocity - linear_velocity
     var target_range2: Vector2 = target.global_position - global_position
     var relative_velocity3 = Vector3(relative_velocity2.x, relative_velocity2.y, 0)
@@ -84,11 +84,11 @@ func proportional_navigation(proportionality_constant: int = 3) -> Vector2:
     return Vector2(acceleration_commanded.x, acceleration_commanded.y)
 
 func get_closing_thrust(stage_thrust: float, stage_time_remaining: float) -> Vector2:
-    if not target:
-        return Vector2.ZERO
     # https://en.wikipedia.org/wiki/Vector_projection#Vector_projection_2
     # create thrust vector to intercept target by reducing orthogonal velocity and increasing parallel velocity
     # first order approximation, assumes constant velocity, assumption mostly holds for the short burn times and low acceleration
+    if not target:
+        return Vector2.ZERO
     var intercept_position: Vector2 = target.global_position + target.linear_velocity * approx_time_to_collision
     var intercept_direction: Vector2 = global_position.direction_to(intercept_position)
     var intercept_direction_unit: Vector2 = intercept_direction.normalized()
