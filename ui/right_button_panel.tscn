@@ -1,0 +1,53 @@
+[gd_scene load_steps=2 format=3 uid="uid://ct82xuv03s3vg"]
+
+[ext_resource type="Script" path="res://ui/right_button_panel.gd" id="1_ssvfb"]
+
+[node name="RightButtonPanel" type="VBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ssvfb")
+
+[node name="Spacer1" type="Control" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Button5" type="Button" parent="."]
+layout_mode = 2
+text = "Button 5
+"
+
+[node name="Spacer2" type="Control" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Button6" type="Button" parent="."]
+layout_mode = 2
+text = "Button 6"
+
+[node name="Spacer3" type="Control" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Button7" type="Button" parent="."]
+layout_mode = 2
+text = "Button 7"
+
+[node name="Spacer4" type="Control" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Button8" type="Button" parent="."]
+layout_mode = 2
+text = "Button 8"
+
+[node name="Spacer5" type="Control" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+
+[connection signal="pressed" from="Button5" to="." method="_on_button_5_pressed"]
+[connection signal="pressed" from="Button6" to="." method="_on_button_6_pressed"]
+[connection signal="pressed" from="Button7" to="." method="_on_button_7_pressed"]
+[connection signal="pressed" from="Button8" to="." method="_on_button_8_pressed"]

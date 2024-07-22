@@ -3,68 +3,25 @@ extends RigidBody2D
 
 var set_initial_state = true
 var enemy_missile_scene = preload("res://missile/missile.tscn")
+@onready var player = get_tree().get_first_node_in_group("player")
 
 var distance: float
-var position_bearing: float
+var position_angle: float
 var initial_position: Vector2
 var speed: float
 var velocity_bearing: float
 var initial_velocity: Vector2
 
-var passive_emission: float = 1
-var detection_distance: float = 200
-
-var missiles: Array[Dictionary] = [
-    {
-        "group": "enemy_missiles",
-        "intended_target": "player",
-        "countermeasures": ["decoys"],
-        "stowed_time": 6,
-        "boost_thrust_magnitude": 3.0,
-        "boost_thrust_time": 3.0,
-        "maneuvering_thrust_magnitude": 0,
-        "terminal_thrust_time": 3,
-        "terminal_thrust_magnitude": 0.1,
-        "seeker_range": 200,
-        "velocity_rejection_coefficient": 1.2
-    },
-    # {
-    #     "group": "enemy_missiles",
-    #     "intended_target": "player",
-    #     "countermeasures": ["decoys"],
-    #     "stowed_time": 12,
-    #     "boost_thrust_magnitude": 3.0,
-    #     "boost_thrust_time": 3.0,
-    #     "maneuvering_thrust_magnitude": 0,
-    #     "terminal_thrust_time": 1,
-    #     "terminal_thrust_magnitude": 1,
-    #     "seeker_range": 200,
-    #     "velocity_rejection_coefficient": 1.3
-    # },
-    # {
-    #     "group": "enemy_missiles",
-    #     "intended_target": "player",
-    #     "countermeasures": ["decoys"],
-    #     "stowed_time": 18,
-    #     "boost_thrust_magnitude": 3.0,
-    #     "boost_thrust_time": 3.0,
-    #     "maneuvering_thrust_magnitude": 0,
-    #     "terminal_thrust_time": 1,
-    #     "terminal_thrust_magnitude": 1,
-    #     "seeker_range": 200,
-    #     "velocity_rejection_coefficient": 1.3
-    # }
-]
+var missiles: Array
 
 func set_parameters(parameters: Dictionary = {}) -> void:
-    distance = parameters.get("distance", 400)
-    position_bearing = deg_to_rad(parameters.get("position_bearing", 0))
-    initial_position = Vector2(cos(position_bearing), sin(position_bearing)) * distance
+    distance = parameters.get("distance", 600)
+    position_angle = deg_to_rad(parameters.get("position_angle", 0))
+    initial_position = player.global_position + Vector2(cos(position_angle), sin(position_angle)) * distance
     speed = parameters.get("speed", 3)
     velocity_bearing = deg_to_rad(parameters.get("velocity_bearing", 90))
     initial_velocity = Vector2(cos(velocity_bearing), sin(velocity_bearing)) * speed
-    passive_emission = parameters.get("passive_emission", 1)
-    detection_distance = parameters.get("detection_distance", 200)
+    missiles = parameters.get("missiles", [])
 
 func _ready() -> void:
     pass

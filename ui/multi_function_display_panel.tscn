@@ -1,0 +1,31 @@
+[gd_scene load_steps=4 format=3 uid="uid://67f8uqxwgsxf"]
+
+[ext_resource type="PackedScene" uid="uid://b8sqw4ayd2bre" path="res://ui/left_button_panel.tscn" id="1_kwx1i"]
+[ext_resource type="PackedScene" uid="uid://dg0e1sxtg5ffn" path="res://world/world.tscn" id="2_tx673"]
+[ext_resource type="PackedScene" uid="uid://ct82xuv03s3vg" path="res://ui/right_button_panel.tscn" id="3_aneim"]
+
+[node name="MultiFunctionDisplayPanel" type="HBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 1
+
+[node name="LeftButtonPanel" parent="." instance=ExtResource("1_kwx1i")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 4.0
+
+[node name="World" parent="CenterContainer" instance=ExtResource("2_tx673")]
+position = Vector2(382, 320)
+
+[node name="RightButtonPanel" parent="." instance=ExtResource("3_aneim")]
+layout_mode = 2
+size_flags_horizontal = 3
