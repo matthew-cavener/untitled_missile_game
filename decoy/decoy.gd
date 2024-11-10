@@ -16,7 +16,7 @@ var lifetime_timer: Timer = Timer.new()
 
 func set_perameters(parameters: Dictionary = {}) -> void:
     group = parameters.get("group", "decoys")
-    lifetime = parameters.get("lifetime", 3)
+    lifetime = parameters.get("lifetime", 12)
     thrust_time = parameters.get("thrust_time", 3)
     thrust_magnitude = parameters.get("thrust_magnitude", 3)
     launch_angle = deg_to_rad(parameters.get("launch_angle", 0))
