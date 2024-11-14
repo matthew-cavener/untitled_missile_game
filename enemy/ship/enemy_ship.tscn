@@ -21,7 +21,7 @@ func _process(_delta):
 script = ExtResource("1_solrs")
 
 [node name="EnemyShipSprite" type="Sprite2D" parent="."]
-modulate = Color(1, 0.647059, 0, 1)
+modulate = Color(1, 0.690196, 0, 1)
 scale = Vector2(0.03125, 0.03125)
 texture = ExtResource("1_u0a58")
 script = SubResource("GDScript_04oyh")

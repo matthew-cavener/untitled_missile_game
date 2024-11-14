@@ -41,6 +41,7 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="Label5" type="Label" parent="."]
+modulate = Color(1, 0.690196, 0, 1)
 layout_mode = 2
 text = "Label 5"
 horizontal_alignment = 2
@@ -50,6 +51,7 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="Label6" type="Label" parent="."]
+modulate = Color(1, 0.690196, 0, 1)
 layout_mode = 2
 text = "Label 6"
 horizontal_alignment = 2
@@ -59,6 +61,7 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="Label7" type="Label" parent="."]
+modulate = Color(1, 0.690196, 0, 1)
 layout_mode = 2
 text = "Label 7"
 horizontal_alignment = 2
@@ -68,6 +71,7 @@ layout_mode = 2
 size_flags_vertical = 3
 
 [node name="Label8" type="Label" parent="."]
+modulate = Color(1, 0.690196, 0, 1)
 layout_mode = 2
 text = "Label 8"
 horizontal_alignment = 2
