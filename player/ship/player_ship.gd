@@ -8,7 +8,7 @@ var missile_parameters = {
     "group": "player_missiles",
     "intended_target": "enemy_missiles",
     "countermeasures": ["none"],
-    "stowed_time": 9,
+    "stowed_time": 12,
     "maneuvering_thrust_magnitude": 0.1,
     "velocity_rejection_coefficient": 1.0
 }
@@ -23,9 +23,8 @@ var decoy_parameters = {
     "launch_angle": 90
 }
 
-
 func on_hit() -> void:
-    queue_free()
+    Events.emit_signal("player_ship_hit")
 
 func _ready():
     add_to_group("player")
@@ -36,8 +35,8 @@ func _ready():
 
 func _integrate_forces(state) -> void:
     if set_initial_state:
-        # missile.set_parameters(missile_parameters)
-        # add_child(missile)
+        missile.set_parameters(missile_parameters)
+        add_child(missile)
         decoy.set_perameters(decoy_parameters)
         add_child(decoy)
         set_initial_state = false

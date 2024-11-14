@@ -1,31 +1,54 @@
-[gd_scene load_steps=4 format=3 uid="uid://67f8uqxwgsxf"]
+[gd_scene load_steps=5 format=3 uid="uid://67f8uqxwgsxf"]
 
 [ext_resource type="PackedScene" uid="uid://b8sqw4ayd2bre" path="res://ui/left_button_panel.tscn" id="1_kwx1i"]
-[ext_resource type="PackedScene" uid="uid://dg0e1sxtg5ffn" path="res://world/world.tscn" id="2_tx673"]
+[ext_resource type="PackedScene" uid="uid://cx1cl51q5v2gw" path="res://ui/display.tscn" id="2_um87o"]
 [ext_resource type="PackedScene" uid="uid://ct82xuv03s3vg" path="res://ui/right_button_panel.tscn" id="3_aneim"]
+[ext_resource type="PackedScene" uid="uid://dg0e1sxtg5ffn" path="res://world/world.tscn" id="3_lyras"]
 
-[node name="MultiFunctionDisplayPanel" type="HBoxContainer"]
+[node name="MultiFunctionDisplayPanel" type="Control"]
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MFDPanelMetalColor" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -8.0
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.211765, 0.239216, 0.290196, 1)
+
+[node name="MFDVerticalBox" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -8.0
+offset_bottom = 8.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 alignment = 1
 
-[node name="LeftButtonPanel" parent="." instance=ExtResource("1_kwx1i")]
+[node name="LeftButtonPanel" parent="MFDVerticalBox" instance=ExtResource("1_kwx1i")]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
+[node name="Display" parent="MFDVerticalBox" instance=ExtResource("2_um87o")]
+clip_contents = true
 layout_mode = 2
-size_flags_horizontal = 3
 size_flags_stretch_ratio = 4.0
 
-[node name="World" parent="CenterContainer" instance=ExtResource("2_tx673")]
-position = Vector2(382, 320)
+[node name="World" parent="MFDVerticalBox/Display" instance=ExtResource("3_lyras")]
+position = Vector2(382, 328)
 
-[node name="RightButtonPanel" parent="." instance=ExtResource("3_aneim")]
+[node name="RightButtonPanel" parent="MFDVerticalBox" instance=ExtResource("3_aneim")]
 layout_mode = 2
 size_flags_horizontal = 3

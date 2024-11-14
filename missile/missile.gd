@@ -51,6 +51,7 @@ func setup_timer(timer: Timer, wait_time: float, timeout_func) -> void:
     timer.timeout.connect(timeout_func)
 
 func on_hit() -> void:
+    Events.emit_signal("missile_hit")
     queue_free()
 
 func _ready() -> void:
@@ -165,6 +166,6 @@ func _integrate_forces(_state) -> void:
     print("missile_state: " + str(state_name))
     print("boost thrust time remaining: %.2f" % boost_thrust_timer.time_left)
     print("approx_time_to_collision: %.2f seconds" % approx_time_to_collision)
-    print("missile force applied: " + str(applied_forces))
+    print("missile force applied: Vector2(%.2f, %.2f)" % [applied_forces.x, applied_forces.y])
     print("missile force magnitude: %.2f" % applied_forces.length())
     print("----------------\n")

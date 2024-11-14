@@ -1,0 +1,73 @@
+[gd_scene load_steps=2 format=3 uid="uid://b3ehmtrkvb7qc"]
+
+[sub_resource type="GDScript" id="GDScript_fexbg"]
+script/source = "extends VBoxContainer
+#
+#func _ready() -> void:
+    #$Label1.text = \"\"
+    #$Label2.text = \"\"
+    #$Label3.text = \"\"
+    #$Label4.text = \"Clock-In\"
+#
+    #Events.connect(\"button_1_pressed\", _on_button_1_pressed)
+    #Events.connect(\"button_2_pressed\", _on_button_2_pressed)
+    #Events.connect(\"button_3_pressed\", _on_button_3_pressed)
+    #Events.connect(\"button_4_pressed\", _on_button_4_pressed)
+#
+#
+#func _on_button_1_pressed() -> void:
+    #$Label1.text = \"Button 1 Pressed\"
+#
+#func _on_button_2_pressed() -> void:
+    #$Label2.text = \"Button 2 Pressed\"
+#
+#func _on_button_3_pressed() -> void:
+    #$Label3.text = \"Button 3 Pressed\"
+#
+#func _on_button_4_pressed() -> void:
+    #$Label4.text = \"Button 4 Pressed\"
+"
+
+[node name="LeftTextPanel" type="VBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_fexbg")
+
+[node name="Spacer1" type="Control" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Label1" type="Label" parent="."]
+layout_mode = 2
+text = "Label 1"
+
+[node name="Spacer2" type="Control" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Label2" type="Label" parent="."]
+layout_mode = 2
+text = "Label 2"
+
+[node name="Spacer3" type="Control" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Label3" type="Label" parent="."]
+layout_mode = 2
+text = "Label 3"
+
+[node name="Spacer4" type="Control" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Label4" type="Label" parent="."]
+layout_mode = 2
+text = "Label 4"
+
+[node name="Spacer5" type="Control" parent="."]
+layout_mode = 2
+size_flags_vertical = 3

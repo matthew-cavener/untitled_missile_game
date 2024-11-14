@@ -10,5 +10,3 @@ script = ExtResource("1_hdatc")
 modulate = Color(0, 0, 1, 1)
 scale = Vector2(0.03125, 0.03125)
 texture = ExtResource("1_cytsw")
-
-[node name="Camera2D" type="Camera2D" parent="."]
