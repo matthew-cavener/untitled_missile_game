@@ -1,9 +1,26 @@
-[gd_scene load_steps=5 format=3 uid="uid://b8sqw4ayd2bre"]
+[gd_scene load_steps=10 format=3 uid="uid://b8sqw4ayd2bre"]
 
 [ext_resource type="Script" path="res://ui/left_button_panel.gd" id="1_0vlbx"]
 [ext_resource type="Texture2D" uid="uid://crkq1bqmnpsyr" path="res://assets/visual/button_rectangle_depth.png" id="2_1tumi"]
 [ext_resource type="Texture2D" uid="uid://ck86qbma2slcy" path="res://assets/visual/panel_rectangle_screws.png" id="3_dxfw6"]
 [ext_resource type="AudioStream" uid="uid://0iy37ay65fgh" path="res://assets/audio/switch20.ogg" id="4_3smv1"]
+[ext_resource type="AudioStream" uid="uid://cn583x5qu0fs4" path="res://assets/audio/switch21.ogg" id="5_j5g36"]
+[ext_resource type="AudioStream" uid="uid://c3le2mqpwr7sb" path="res://assets/audio/switch22.ogg" id="6_d2kr3"]
+[ext_resource type="AudioStream" uid="uid://bb12q3o8fwigr" path="res://assets/audio/switch23.ogg" id="7_g6ksg"]
+[ext_resource type="AudioStream" uid="uid://bqneduyn0j1bb" path="res://assets/audio/switch24.ogg" id="8_dlm5m"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_08gdv"]
+streams_count = 5
+stream_0/stream = ExtResource("4_3smv1")
+stream_0/weight = 1.0
+stream_1/stream = ExtResource("5_j5g36")
+stream_1/weight = 1.0
+stream_2/stream = ExtResource("6_d2kr3")
+stream_2/weight = 1.0
+stream_3/stream = ExtResource("7_g6ksg")
+stream_3/weight = 1.0
+stream_4/stream = ExtResource("8_dlm5m")
+stream_4/weight = 1.0
 
 [node name="LeftButtonPanel" type="VBoxContainer"]
 anchors_preset = 15
@@ -23,7 +40,7 @@ texture_normal = ExtResource("2_1tumi")
 texture_pressed = ExtResource("3_dxfw6")
 
 [node name="Button1Click" type="AudioStreamPlayer2D" parent="Button1"]
-stream = ExtResource("4_3smv1")
+stream = SubResource("AudioStreamRandomizer_08gdv")
 
 [node name="Spacer2" type="Control" parent="."]
 layout_mode = 2
