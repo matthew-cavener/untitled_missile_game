@@ -47,7 +47,7 @@ layout_mode = 2
 size_flags_stretch_ratio = 4.0
 
 [node name="World" parent="MFDVerticalBox/Display" instance=ExtResource("3_lyras")]
-position = Vector2(382, 328)
+position = Vector2(380, 328)
 
 [node name="RightButtonPanel" parent="MFDVerticalBox" instance=ExtResource("3_aneim")]
 layout_mode = 2

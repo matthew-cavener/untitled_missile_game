@@ -88,6 +88,8 @@ func get_closing_thrust(stage_thrust: float, stage_time_remaining: float) -> Vec
     if target:
         var intercept_position: Vector2 = target.global_position + target.linear_velocity * approx_time_to_collision
         var intercept_direction: Vector2 = global_position.direction_to(intercept_position)
+        if intercept_direction.length() == 0:
+            intercept_direction = global_position.direction_to(target.global_position)
         var intercept_direction_unit: Vector2 = intercept_direction.normalized()
         var stage_delta_v: float = (stage_thrust * stage_time_remaining) / self.mass
         var velocity_vector_projection: Vector2 = linear_velocity.dot(intercept_direction_unit) * intercept_direction_unit # projection of velocity vector onto intercept direction

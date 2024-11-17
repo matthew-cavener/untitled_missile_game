@@ -1,12 +1,10 @@
 [gd_scene load_steps=3 format=3 uid="uid://bb6g7w1ru1jr4"]
 
-[ext_resource type="Texture2D" uid="uid://c8y1tv2locndd" path="res://assets/visual/Circle.png" id="1_cytsw"]
 [ext_resource type="Script" path="res://player/ship/player_ship.gd" id="1_hdatc"]
+[ext_resource type="PackedScene" uid="uid://lph3b30dgdlx" path="res://assets/visual/radar_contact.tscn" id="2_x6xbl"]
 
 [node name="PlayerShip" type="RigidBody2D"]
 script = ExtResource("1_hdatc")
 
-[node name="PlayerShipSprite" type="Sprite2D" parent="."]
-modulate = Color(0, 0, 1, 1)
-scale = Vector2(0.03125, 0.03125)
-texture = ExtResource("1_cytsw")
+[node name="RadarContact" parent="." instance=ExtResource("2_x6xbl")]
+scale = Vector2(0.031, 0.031)

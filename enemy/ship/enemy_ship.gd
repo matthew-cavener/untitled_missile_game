@@ -16,10 +16,10 @@ var missiles: Array
 
 func set_parameters(parameters: Dictionary = {}) -> void:
     distance = parameters.get("distance", 500)
-    position_angle = deg_to_rad(parameters.get("position_angle", 0))
+    position_angle = deg_to_rad(parameters.get("position_angle", 20))
     initial_position = player.global_position + Vector2(cos(position_angle), sin(position_angle)) * distance
-    speed = parameters.get("speed", 3)
-    velocity_bearing = deg_to_rad(parameters.get("velocity_bearing", 90))
+    speed = parameters.get("speed", 6)
+    velocity_bearing = deg_to_rad(parameters.get("velocity_bearing", 180))
     initial_velocity = Vector2(cos(velocity_bearing), sin(velocity_bearing)) * speed
     missiles = parameters.get("missiles", [])
 

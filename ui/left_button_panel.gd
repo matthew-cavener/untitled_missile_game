@@ -2,7 +2,6 @@ extends VBoxContainer
 
 
 func _on_button_1_pressed():
-    $Button1/Button1Click.play()
     Events.emit_signal("button_1_pressed")
 
 func _on_button_2_pressed():
