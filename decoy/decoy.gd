@@ -5,16 +5,19 @@ enum DecoyState { STOWED, DEPLOYING, DEPLOYED, SPENT}
 var decoy_state: DecoyState = DecoyState.DEPLOYING
 var state_name: String = "DEPLOYING"
 
+var display_name: String
 var group: String
 var lifetime: float
 var thrust_time: float
 var thrust_magnitude: float
 var launch_angle: float
 
+var stowed_timer: Timer = Timer.new()
 var thrust_timer: Timer = Timer.new()
 var lifetime_timer: Timer = Timer.new()
 
-func set_perameters(parameters: Dictionary = {}) -> void:
+func set_parameters(parameters: Dictionary = {}) -> void:
+    display_name = parameters.get("display_name", "DEFAULT-1 Chaff Block N")
     group = parameters.get("group", "decoys")
     lifetime = parameters.get("lifetime", 12)
     thrust_time = parameters.get("thrust_time", 3)
@@ -35,6 +38,10 @@ func _ready():
     setup_timer(thrust_timer, thrust_time, _on_thrust_timer_timeout)
     setup_timer(lifetime_timer, lifetime, _on_lifetime_timer_timeout)
     thrust_timer.start()
+
+func launch():
+    decoy_state = DecoyState.DEPLOYING
+    state_name = "DEPLOYING"
 
 func _on_thrust_timer_timeout() -> void:
     decoy_state = DecoyState.DEPLOYED

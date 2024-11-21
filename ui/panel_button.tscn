@@ -1,0 +1,57 @@
+[gd_scene load_steps=16 format=3 uid="uid://cgc86k1dh6but"]
+
+[ext_resource type="Texture2D" uid="uid://crkq1bqmnpsyr" path="res://assets/visual/button_rectangle_depth.png" id="1_naua7"]
+[ext_resource type="Texture2D" uid="uid://ck86qbma2slcy" path="res://assets/visual/panel_rectangle_screws.png" id="2_sk6xn"]
+[ext_resource type="AudioStream" uid="uid://csh8mskma1khu" path="res://assets/audio/switch1.ogg" id="3_7gcal"]
+[ext_resource type="Script" path="res://ui/panel_button.gd" id="3_n511q"]
+[ext_resource type="AudioStream" uid="uid://bbpdgkaxm1rhs" path="res://assets/audio/switch2.ogg" id="4_f4pmx"]
+[ext_resource type="AudioStream" uid="uid://cppi8pd1krmen" path="res://assets/audio/switch3.ogg" id="5_c31sv"]
+[ext_resource type="AudioStream" uid="uid://de36sf5jf66bp" path="res://assets/audio/switch4.ogg" id="6_mqrfl"]
+[ext_resource type="AudioStream" uid="uid://mjp8gvsr37kg" path="res://assets/audio/switch5.ogg" id="7_besxa"]
+[ext_resource type="AudioStream" uid="uid://0iy37ay65fgh" path="res://assets/audio/switch20.ogg" id="8_oy708"]
+[ext_resource type="AudioStream" uid="uid://cn583x5qu0fs4" path="res://assets/audio/switch21.ogg" id="9_dlo0j"]
+[ext_resource type="AudioStream" uid="uid://c3le2mqpwr7sb" path="res://assets/audio/switch22.ogg" id="10_dxj2n"]
+[ext_resource type="AudioStream" uid="uid://bb12q3o8fwigr" path="res://assets/audio/switch23.ogg" id="11_6wrco"]
+[ext_resource type="AudioStream" uid="uid://bqneduyn0j1bb" path="res://assets/audio/switch24.ogg" id="12_1dowx"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_iegre"]
+streams_count = 5
+stream_0/stream = ExtResource("3_7gcal")
+stream_0/weight = 1.0
+stream_1/stream = ExtResource("4_f4pmx")
+stream_1/weight = 1.0
+stream_2/stream = ExtResource("5_c31sv")
+stream_2/weight = 1.0
+stream_3/stream = ExtResource("6_mqrfl")
+stream_3/weight = 1.0
+stream_4/stream = ExtResource("7_besxa")
+stream_4/weight = 1.0
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_0fn4d"]
+streams_count = 5
+stream_0/stream = ExtResource("8_oy708")
+stream_0/weight = 1.0
+stream_1/stream = ExtResource("9_dlo0j")
+stream_1/weight = 1.0
+stream_2/stream = ExtResource("10_dxj2n")
+stream_2/weight = 1.0
+stream_3/stream = ExtResource("11_6wrco")
+stream_3/weight = 1.0
+stream_4/stream = ExtResource("12_1dowx")
+stream_4/weight = 1.0
+
+[node name="PanelButton" type="TextureButton"]
+offset_right = 40.0
+offset_bottom = 40.0
+texture_normal = ExtResource("1_naua7")
+texture_pressed = ExtResource("2_sk6xn")
+script = ExtResource("3_n511q")
+
+[node name="ButtonDown" type="AudioStreamPlayer2D" parent="."]
+stream = SubResource("AudioStreamRandomizer_iegre")
+
+[node name="ButtonUp" type="AudioStreamPlayer2D" parent="."]
+stream = SubResource("AudioStreamRandomizer_0fn4d")
+
+[connection signal="button_down" from="." to="." method="_on_button_down"]
+[connection signal="button_up" from="." to="." method="_on_button_up"]

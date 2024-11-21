@@ -3,31 +3,100 @@ extends RigidBody2D
 var set_initial_state = true
 
 var missile_scene = preload("res://missile/missile.tscn")
-var missile = missile_scene.instantiate()
-var missile_parameters = {
-    "group": "player_missiles",
-    "intended_target": "enemy_missiles",
-    "countermeasures": ["none"],
-    "stowed_time": 9,
-    "maneuvering_thrust_magnitude": 0.1,
-    "velocity_rejection_coefficient": 1.0
-}
-
 var decoy_scene = preload("res://decoy/decoy.tscn")
-var decoy = decoy_scene.instantiate()
-var decoy_parameters = {
-    "group": "decoys",
-    "lifetime": 600,
-    "thrust_time": 1,
-    "thrust_magnitude": 1,
-    "launch_angle": 90
-}
 
+var tube_1_contents
+var tube_2_contents
+var tube_3_contents
+var tube_4_contents
+var tube_5_contents
+var tube_6_contents
+
+func set_parameters(parameters: Dictionary = {}) -> void:
+    tube_1_contents = parameters.get("tube_1_contents", {})
+    tube_2_contents = parameters.get("tube_2_contents", {})
+    tube_3_contents = parameters.get("tube_3_contents", {})
+    tube_4_contents = parameters.get("tube_4_contents", {})
+    tube_5_contents = parameters.get("tube_5_contents", {})
+    tube_6_contents = parameters.get("tube_6_contents", {})
+
+func _draw():
+    var center: Vector2 = Vector2.ZERO
+    var start_angle: float = 0
+    var end_angle: float = 360
+    var point_count: int = 180
+    var color: Color = "#ffb000"
+    var width: float = 1
+    var antialiased: bool = true
+
+    for radius in range(100, 400, 100):
+        draw_arc(center, radius, start_angle, end_angle, point_count, color, width, antialiased)
+
+func _on_launch_tube_1():
+    launch_tube_contents(tube_1_contents)
+    tube_1_contents = {}
+
+func _on_launch_tube_2():
+    launch_tube_contents(tube_2_contents)
+    tube_2_contents = {}
+
+func _on_launch_tube_3():
+    launch_tube_contents(tube_3_contents)
+    tube_3_contents = {}
+
+func _on_launch_tube_4():
+    launch_tube_contents(tube_4_contents)
+    tube_4_contents = {}
+
+func _on_launch_tube_5():
+    launch_tube_contents(tube_5_contents)
+    tube_5_contents = {}
+
+func _on_launch_tube_6():
+    launch_tube_contents(tube_6_contents)
+    tube_6_contents = {}
+
+func _on_ping(ping_source: Node) -> void:
+    $RadarPingSound.play()
+    var direction = (ping_source.global_position - global_position).normalized()
+    var line = Line2D.new()
+    var tween = create_tween()
+    line.width = 1
+    line.default_color = Color("#ffb000")
+    line.points = [position, direction * 1000]
+    tween.tween_property(line, "default_color:a", 0, 1)
+    tween.tween_callback(line.queue_free)
+    add_child(line)
+
+func launch_tube_contents(tube_contents):
+    if tube_contents:
+        match tube_contents["type"]:
+            "missile":
+                var missile = missile_scene.instantiate()
+                missile.set_parameters(tube_contents)
+                add_child(missile)
+                missile.launch()
+            "decoy":
+                var decoy = decoy_scene.instantiate()
+                decoy.set_parameters(tube_contents)
+                add_child(decoy)
+                decoy.launch()
+            _:
+                print("tube_contents type not recognized")
+    else:
+        print("tube is empty")
 
 func on_hit() -> void:
-    queue_free()
+    Events.emit_signal("player_ship_hit")
 
 func _ready():
+    Events.connect("ping", _on_ping)
+    Events.connect("launch_tube_1", _on_launch_tube_1)
+    Events.connect("launch_tube_2", _on_launch_tube_2)
+    Events.connect("launch_tube_3", _on_launch_tube_3)
+    Events.connect("launch_tube_4", _on_launch_tube_4)
+    Events.connect("launch_tube_5", _on_launch_tube_5)
+    Events.connect("launch_tube_6", _on_launch_tube_6)
     add_to_group("player")
     print("\n----------------")
     print("player ship spwaned")
@@ -35,9 +104,4 @@ func _ready():
     print("----------------\n")
 
 func _integrate_forces(state) -> void:
-    if set_initial_state:
-        # missile.set_parameters(missile_parameters)
-        # add_child(missile)
-        decoy.set_perameters(decoy_parameters)
-        add_child(decoy)
-        set_initial_state = false
+    pass

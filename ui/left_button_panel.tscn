@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://b8sqw4ayd2bre"]
+[gd_scene load_steps=3 format=3 uid="uid://b8sqw4ayd2bre"]
 
 [ext_resource type="Script" path="res://ui/left_button_panel.gd" id="1_0vlbx"]
+[ext_resource type="PackedScene" uid="uid://cgc86k1dh6but" path="res://ui/panel_button.tscn" id="2_w16lt"]
 
 [node name="LeftButtonPanel" type="VBoxContainer"]
 anchors_preset = 15
@@ -14,33 +15,29 @@ script = ExtResource("1_0vlbx")
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Button1" type="Button" parent="."]
+[node name="Button1" parent="." instance=ExtResource("2_w16lt")]
 layout_mode = 2
-text = "Button 1"
 
 [node name="Spacer2" type="Control" parent="."]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Button2" type="Button" parent="."]
+[node name="Button2" parent="." instance=ExtResource("2_w16lt")]
 layout_mode = 2
-text = "Button 2"
 
 [node name="Spacer3" type="Control" parent="."]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Button3" type="Button" parent="."]
+[node name="Button3" parent="." instance=ExtResource("2_w16lt")]
 layout_mode = 2
-text = "Button 3"
 
 [node name="Spacer4" type="Control" parent="."]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Button4" type="Button" parent="."]
+[node name="Button4" parent="." instance=ExtResource("2_w16lt")]
 layout_mode = 2
-text = "Button 4"
 
 [node name="Spacer5" type="Control" parent="."]
 layout_mode = 2
