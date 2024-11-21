@@ -12,12 +12,17 @@ var state_name: String = "STOWED"
 
 var stowed_time: float
 
+var display_name: String
 var group: String
 var intended_target: String
 var countermeasures: Array
 @onready var target: Node = get_tree().get_first_node_in_group(intended_target)
+@onready var player = get_tree().get_first_node_in_group("player")
 @onready var approx_time_to_collision: float = 300.0
 
+var seeker_has_ping: bool = false
+var ping_time: float
+var short_ping_time: float
 var boost_thrust_magnitude: float
 var boost_thrust_time: float
 var maneuvering_thrust_magnitude: float
@@ -29,10 +34,15 @@ var velocity_rejection_coefficient: float
 var stowed_timer = Timer.new()
 var boost_thrust_timer: Timer = Timer.new()
 var terminal_thrust_timer: Timer = Timer.new()
+var ping_timer = Timer.new()
 
 
 func set_parameters(parameters: Dictionary = {}) -> void:
+    seeker_has_ping = parameters.get("seeker_has_ping", false)
+    ping_time = parameters.get("ping_time", 3)
+    short_ping_time = parameters.get("short_ping_time", 1)
     stowed_time = parameters.get("stowed_time", 3)
+    display_name = parameters.get("display_name", "DEFAULT-1 AMM Block N")
     group = parameters.get("group", "enemy_missiles")
     intended_target = parameters.get("intended_target", "player")
     countermeasures = parameters.get("countermeasures", ["decoys"])
@@ -44,9 +54,9 @@ func set_parameters(parameters: Dictionary = {}) -> void:
     seeker_range = parameters.get("seeker_range", 200)
     velocity_rejection_coefficient = parameters.get("velocity_rejection_coefficient", 1.3)
 
-func setup_timer(timer: Timer, wait_time: float, timeout_func) -> void:
+func setup_timer(timer: Timer, wait_time: float, timeout_func, one_shot: bool = true) -> void:
     timer.wait_time = wait_time
-    timer.one_shot = true
+    timer.one_shot = one_shot
     add_child(timer)
     timer.timeout.connect(timeout_func)
 
@@ -56,10 +66,16 @@ func on_hit() -> void:
 
 func _ready() -> void:
     add_to_group(group)
+    setup_timer(ping_timer, ping_time, _on_ping_timer_timeout, true)
     setup_timer(stowed_timer, stowed_time, _on_stowed_timer_timeout)
     setup_timer(boost_thrust_timer, boost_thrust_time, _on_boost_thrust_timer_timeout)
     setup_timer(terminal_thrust_timer, terminal_thrust_time, _on_terminal_thrust_timer_timeout)
     stowed_timer.start()
+
+func launch():
+    stowed_timer.stop()
+    stowed_timer.emit_signal("timeout")
+    stowed_timer.queue_free()
 
 func get_target() -> Node:
     for countermeasure in countermeasures:
@@ -101,18 +117,34 @@ func get_closing_thrust(stage_thrust: float, stage_time_remaining: float) -> Vec
     else:
         return Vector2.ZERO
 
+func _on_ping_timer_timeout() -> void:
+    if seeker_has_ping:
+        Events.emit_signal("ping", self)
+        match missile_state:
+            MissileState.SEEKING:
+                ping_timer.wait_time = short_ping_time
+            MissileState.DISARMED:
+                ping_timer.queue_free()
+        ping_timer.start()
+    else:
+        pass
+
 func _on_stowed_timer_timeout() -> void:
     boost_thrust_timer.start()
+    ping_timer.start()
     missile_state = MissileState.BOOSTING
     state_name = "BOOSTING"
+    stowed_timer.queue_free()
 
 func _on_boost_thrust_timer_timeout() -> void:
     missile_state = MissileState.MIDCOURSE
     state_name = "MIDCOURSE"
+    boost_thrust_timer.queue_free()
 
 func _on_terminal_thrust_timer_timeout() -> void:
     missile_state = MissileState.DISARMED
     state_name = "DISARMED"
+    terminal_thrust_timer.queue_free()
 
 func _integrate_forces(_state) -> void:
     var applied_forces: Vector2 = Vector2.ZERO
@@ -166,7 +198,6 @@ func _integrate_forces(_state) -> void:
     print("global_position.x: %.2f | global_position.y: %.2f" % [global_position.x, global_position.y])
     print("linear_velocity.x: %.2f | linear_velocity.y: %.2f" % [linear_velocity.x, linear_velocity.y])
     print("missile_state: " + str(state_name))
-    print("boost thrust time remaining: %.2f" % boost_thrust_timer.time_left)
     print("approx_time_to_collision: %.2f seconds" % approx_time_to_collision)
     print("missile force applied: Vector2(%.2f, %.2f)" % [applied_forces.x, applied_forces.y])
     print("missile force magnitude: %.2f" % applied_forces.length())

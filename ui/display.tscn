@@ -36,7 +36,6 @@ grow_vertical = 2
 layout_mode = 2
 size_flags_horizontal = 3
 alignment = 1
-script = null
 
 [node name="CenterDisplay" type="CenterContainer" parent="VBoxContainer"]
 layout_mode = 2
@@ -59,4 +58,3 @@ vertical_alignment = 1
 [node name="RightTextPanel" parent="VBoxContainer" instance=ExtResource("2_yxs6y")]
 layout_mode = 2
 size_flags_horizontal = 3
-script = null

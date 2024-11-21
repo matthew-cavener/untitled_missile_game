@@ -2,7 +2,7 @@ class_name EnemyShip
 extends RigidBody2D
 
 var set_initial_state = true
-var enemy_missile_scene = preload("res://missile/missile.tscn")
+var missile_scene = preload("res://missile/missile.tscn")
 @onready var player = get_tree().get_first_node_in_group("player")
 
 var distance: float
@@ -31,7 +31,7 @@ func _integrate_forces(state) -> void:
         state.transform = Transform2D(0.0, initial_position)
         self.linear_velocity = initial_velocity
         for missile in missiles:
-            var enemy_missile = enemy_missile_scene.instantiate()
+            var enemy_missile = missile_scene.instantiate()
             enemy_missile.linear_velocity = self.linear_velocity
             enemy_missile.set_parameters(missile)
             add_child(enemy_missile)
