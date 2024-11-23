@@ -67,8 +67,8 @@ func _integrate_forces(_state) -> void:
             pass
 
     apply_central_force(applied_forces)
-    print("\n----------------")
-    print("decoy global_position.x: %.2f | global_position.y: %.2f" % [global_position.x, global_position.y])
-    print("decoy linear_velocity.x: %.2f | linear_velocity.y: %.2f" % [linear_velocity.x, linear_velocity.y])
-    print("decoy state: " + state_name)
-    print("----------------\n")
+    #print("\n----------------")
+    #print("decoy global_position.x: %.2f | global_position.y: %.2f" % [global_position.x, global_position.y])
+    #print("decoy linear_velocity.x: %.2f | linear_velocity.y: %.2f" % [linear_velocity.x, linear_velocity.y])
+    #print("decoy state: " + state_name)
+    #print("----------------\n")

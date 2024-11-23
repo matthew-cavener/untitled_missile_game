@@ -39,8 +39,6 @@ alignment = 1
 
 [node name="CenterDisplay" type="CenterContainer" parent="VBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_stretch_ratio = 3.0
 
 [node name="CentralText" type="Label" parent="VBoxContainer/CenterDisplay"]
 modulate = Color(1, 0.690196, 0, 1)
