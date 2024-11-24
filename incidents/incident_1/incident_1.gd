@@ -5,20 +5,9 @@ var player_ship_scene = preload("res://player/ship/player_ship.tscn")
 @onready var world: Node2D = get_tree().get_first_node_in_group("world")
 
 var resources_expended = 0
-var incident_resolution_time = 15
+var incident_resolved = false
+var incident_resolution_time = 35
 var incident_timer = Timer.new()
-
-var details = {
-    "name": "Incident 1",
-    "description": "
-        Date: 2024-02-09
-        Location: Callisto - Ganymede transfer orbit
-        Incident Report: Single RADAR contact, no casualties.
-        Resource expended: %d
-    " % resources_expended,
-    "resources_expended": resources_expended,
-    "incident_report_submitted": false,
-}
 
 var player_ship_tube_1_contents = {
     "type": "missile",
@@ -60,17 +49,16 @@ var enemy_ship_1_parameters = {
     "missiles": enemy_ship_1_missiles
 }
 
-func update_details():
-    details = {
+func get_details():
+    var details = {
         "name": "Incident 1",
         "description": "
-            Date: 2024-02-09
+            Date: 1993-02-09
             Location: Callisto - Ganymede transfer orbit
             Incident Report: Single RADAR contact, no casualties.
-            Resource expended: %d
-        " % resources_expended,
+            Resource expended: " + str(resources_expended),
         "resources_expended": resources_expended,
-        "incident_report_submitted": false,
+        "incident_report_submitted": incident_resolved,
     }
     return details
 
@@ -91,9 +79,7 @@ func _on_incident_1_begin():
     enemy_ship_1.set_parameters(enemy_ship_1_parameters)
 
 func _on_incident_1_resolved():
-    update_details()
-    world.incidents["incident1"].details["resources_expended"] = resources_expended
-    world.incidents["incident1"].details["incident_report_submitted"] = true
+    incident_resolved = true
     Events.emit_signal("incident_resolved")
     incident_timer.queue_free()
     for child in get_children():

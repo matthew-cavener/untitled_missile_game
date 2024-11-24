@@ -51,8 +51,8 @@ func _on_button_1_pressed() -> void:
             world.visible = false
             central_text.text = "Please select an incident to review"
             label_1.text = ""
-            label_2.text = world.incidents["incident1"].details["name"]
-            label_3.text = ""
+            label_2.text = world.incidents["incident1"].get_details()["name"]
+            label_3.text = world.incidents["incident2"].get_details()["name"] if world.incidents["incident1"].get_details()["incident_report_submitted"] else ""
             label_4.text = ""
             label_5.text = "Main Menu"
             label_6.text = ""
@@ -83,11 +83,11 @@ func _on_button_2_pressed() -> void:
             Events.emit_signal("launch_tube_1")
             label_2.text = "empty"
         DisplayState.INCIDENTS:
-            if not world.incidents["incident1"].details["incident_report_submitted"]:
+            if world.incidents["incident1"].get_details()["incident_report_submitted"]:
+                central_text.text = world.incidents["incident1"].get_details()["description"]
+            else:
                 selected_incident = "1"
                 central_text.text = "No incident report found.\nIf you are currently experiencing an incident, please Clock-In."
-            else:
-                central_text.text = world.incidents["incident1"].details["description"]
 
 
 func _on_button_3_pressed() -> void:
@@ -100,7 +100,11 @@ func _on_button_3_pressed() -> void:
             Events.emit_signal("launch_tube_2")
             label_3.text = "empty"
         DisplayState.INCIDENTS:
-            selected_incident = "2"
+            if world.incidents["incident2"].get_details()["incident_report_submitted"]:
+                central_text.text = world.incidents["incident2"].get_details()["description"]
+            else:
+                selected_incident = "2"
+                central_text.text = "No incident report found.\nIf you are currently experiencing an incident, please Clock-In."
 
 
 func _on_button_4_pressed() -> void:
@@ -208,4 +212,27 @@ func _on_incident_resolved() -> void:
     label_6.text = ""
     label_7.text = ""
     label_8.text = "Quit"
-    central_text.text = "Incident resolved.\nThank you for safeguarding\nJoveEx property!"
+    central_text.text = "
+    Incident resolved.
+    Thank you for safeguarding
+    JoveEx® property!
+
+    Company Assets expended will be
+    evaluated during manifest reconciliation.
+    and reflected in your
+    performance bonus eligibility.
+
+    POSTED LEGAL NOTICE:
+    In accordance with the decision of the court
+    in the case of
+    Jovian Parcel Service® v.
+    Jovian System Operators Union
+    no employer may deduct
+    from the wages of an employee,
+    or require an employee to pay back,
+    any resource expended by the employee
+    in the course of the employee's duties.
+    If you believe your employer has
+    violated this regulation, please
+    contact your local labor board.
+    "
