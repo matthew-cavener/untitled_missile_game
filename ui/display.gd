@@ -1,6 +1,6 @@
 extends Control
 
-enum DisplayState {BOOT, RADAR, ORDNANCE, INCIDENTS}
+enum DisplayState {BOOT, RADAR, ORDNANCE, INCIDENTS, DEAD}
 
 var display_state: DisplayState = DisplayState.BOOT
 var selected_incident: String = "NONE"
@@ -42,6 +42,7 @@ func _ready() -> void:
     Events.connect("button_8_pressed", _on_button_8_pressed)
 
     Events.connect("incident_resolved", _on_incident_resolved)
+    Events.connect("player_ship_hit", _on_player_ship_hit)
 
 
 func _on_button_1_pressed() -> void:
@@ -129,7 +130,11 @@ func _on_button_4_pressed() -> void:
             Events.emit_signal("launch_tube_3")
             label_4.text = "empty"
         DisplayState.INCIDENTS:
-            selected_incident = "3"
+            if world.incidents["incident3"].get_details()["incident_report_submitted"]:
+                central_text.text = world.incidents["incident3"].get_details()["description"]
+            else:
+                selected_incident = "3"
+                central_text.text = "No incident report found.\nIf you are currently experiencing an incident, please Clock-In."
 
 
 func _on_button_5_pressed() -> void:
@@ -200,10 +205,34 @@ func _on_button_8_pressed() -> void:
             label_8.text = "empty"
         DisplayState.INCIDENTS:
             selected_incident = "6"
+        DisplayState.DEAD:
+            label_1.text = "You"
+            label_2.text = "Are"
+            label_3.text = "Dead"
+            label_4.text = "Clock-In"
+            label_5.text = "It's"
+            label_6.text = "Too"
+            label_7.text = "Late"
+            label_8.text = "Quit"
+
+func _on_player_ship_hit() -> void:
+    display_state = DisplayState.DEAD
+    world.visible = false
+    selected_incident = "NONE"
+    label_1.text = "You"
+    label_2.text = "Are"
+    label_3.text = "Dead"
+    label_4.text = "Clock-In"
+    label_5.text = "You"
+    label_6.text = "Are"
+    label_7.text = "Dead"
+    label_8.text = "Quit"
+    central_text.text = world.get_final_display_text()
 
 func _on_incident_resolved() -> void:
     display_state = DisplayState.BOOT
     world.visible = false
+    selected_incident = "NONE"
     label_1.text = "Incidents"
     label_2.text = ""
     label_3.text = ""
@@ -218,15 +247,16 @@ func _on_incident_resolved() -> void:
     JoveEx® property!
 
     Company Assets expended will be
-    evaluated during manifest reconciliation.
+    evaluated during manifest reconciliation
     and reflected in your
-    performance bonus eligibility.
+    performance bonus.
 
     POSTED LEGAL NOTICE:
     In accordance with the decision of the court
     in the case of
-    Jovian Parcel Service® v.
-    Jovian System Operators Union
+    Jovian Parcel Service®
+    v.
+    Jovian Transport Workers Union
     no employer may deduct
     from the wages of an employee,
     or require an employee to pay back,
