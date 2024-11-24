@@ -10,7 +10,7 @@ var group: String
 var lifetime: float
 var thrust_time: float
 var thrust_magnitude: float
-var launch_angle: float
+var launch_bearing: float
 
 var stowed_timer: Timer = Timer.new()
 var thrust_timer: Timer = Timer.new()
@@ -20,9 +20,9 @@ func set_parameters(parameters: Dictionary = {}) -> void:
     display_name = parameters.get("display_name", "DEFAULT-1 Chaff Block N")
     group = parameters.get("group", "decoys")
     lifetime = parameters.get("lifetime", 12)
-    thrust_time = parameters.get("thrust_time", 3)
+    thrust_time = parameters.get("thrust_time", 1)
     thrust_magnitude = parameters.get("thrust_magnitude", 3)
-    launch_angle = deg_to_rad(parameters.get("launch_angle", 0))
+    launch_bearing = deg_to_rad(parameters.get("launch_bearing", 0) + 270)
 
 func setup_timer(timer: Timer, wait_time: float, timeout_func) -> void:
     timer.wait_time = wait_time
@@ -59,7 +59,7 @@ func _integrate_forces(_state) -> void:
             pass
         DecoyState.DEPLOYING:
             var launch_vector: Vector2
-            launch_vector = Vector2(cos(launch_angle), sin(launch_angle))
+            launch_vector = Vector2(cos(launch_bearing), sin(launch_bearing))
             applied_forces += launch_vector * thrust_magnitude
         DecoyState.DEPLOYED:
             pass

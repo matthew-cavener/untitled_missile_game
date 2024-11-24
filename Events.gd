@@ -31,7 +31,7 @@ signal ping(ping_source: Node)
 
 signal resources_expended(amount: int)
 
-signal missile_fired
+signal missile_launch(launch_source: Node, boost_time: float)
 signal missile_hit
 
 signal incident_resolved

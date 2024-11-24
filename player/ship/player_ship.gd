@@ -58,13 +58,20 @@ func _on_launch_tube_6():
 
 func _on_ping(ping_source: Node) -> void:
     $RadarPingSound.play()
-    var direction = (ping_source.global_position - global_position).normalized()
+    draw_passive_sensor_line(ping_source)
+
+func _on_missile_launched(launch_source: Node, boost_time: float) -> void:
+    $MissileLaunchSound.play(4.76)
+    draw_passive_sensor_line(launch_source, boost_time)
+
+func draw_passive_sensor_line(source: Node, decay_time: float = 1) -> void:
+    var direction = (source.global_position - global_position).normalized()
     var line = Line2D.new()
     var tween = create_tween()
     line.width = 1
     line.default_color = Color("#ffb000")
     line.points = [position, direction * 1000]
-    tween.tween_property(line, "default_color:a", 0, 1)
+    tween.tween_property(line, "default_color:a", 0, decay_time)
     tween.tween_callback(line.queue_free)
     add_child(line)
 
@@ -97,6 +104,7 @@ func _ready():
     Events.connect("launch_tube_4", _on_launch_tube_4)
     Events.connect("launch_tube_5", _on_launch_tube_5)
     Events.connect("launch_tube_6", _on_launch_tube_6)
+    Events.connect("missile_launch", _on_missile_launched)
     add_to_group("player")
     #print("\n----------------")
     #print("player ship spwaned")

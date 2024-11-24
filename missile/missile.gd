@@ -140,6 +140,8 @@ func _on_ping_timer_timeout() -> void:
         pass
 
 func _on_stowed_timer_timeout() -> void:
+    if intended_target == "player":
+        Events.emit_signal("missile_launch", self, boost_thrust_time)
     stowed_timer.queue_free()
     boost_thrust_timer.start()
     ping_timer.start()
@@ -184,6 +186,12 @@ func _integrate_forces(_state) -> void:
         MissileState.MIDCOURSE:
             if (target.global_position - global_position).length() <= seeker_range:
                 missile_state = MissileState.SEEKING
+            elif maneuvering_thrust_magnitude > 0:
+                var prop_nav_acceleration = proportional_navigation()
+                var prop_nav_thrust = prop_nav_acceleration * self.mass
+                if prop_nav_thrust.length() > maneuvering_thrust_magnitude:
+                    prop_nav_thrust = prop_nav_thrust.normalized() * maneuvering_thrust_magnitude
+                applied_forces += prop_nav_thrust
 
         MissileState.SEEKING:
             state_name = "SEEKING"

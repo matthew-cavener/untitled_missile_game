@@ -5,13 +5,16 @@ var player_ship_scene = preload("res://player/ship/player_ship.tscn")
 @onready var world: Node2D = get_tree().get_first_node_in_group("world")
 
 var resources_expended = 0
+var salary = 2320
+var max_bonus = 13333 - salary
+var bonus = 0
 var incident_resolved = false
 var incident_resolution_time = 35
 var incident_timer = Timer.new()
 
 var player_ship_tube_1_contents = {
     "type": "missile",
-    "display_name": "placeholder-1 AMM Block N",
+    "display_name": "VACM-161 SM-3 Block IIA\nAutonomous Missile Interceptor",
     "resource_cost": 3000,
     "seeker_has_ping": false,
     "group": "player_missiles",
@@ -34,8 +37,8 @@ var enemy_ship_1_missiles = [
         "boost_thrust_magnitude": 2.0,
         "boost_thrust_time": 6.0,
         "maneuvering_thrust_magnitude": 0,
-        "terminal_thrust_time": 1.0,
-        "terminal_thrust_magnitude": 0.1,
+        "terminal_thrust_time": 3.0,
+        "terminal_thrust_magnitude": 1.0,
         "seeker_range": 120,
         "velocity_rejection_coefficient": 1.2
     }
@@ -57,10 +60,17 @@ func get_details():
             Location: Callisto - Ganymede transfer orbit
             Incident Report: Single RADAR contact, no casualties.
             Resource expended: " + str(resources_expended),
+        
         "resources_expended": resources_expended,
         "incident_report_submitted": incident_resolved,
     }
     return details
+
+func get_resouces_provided():
+    return 3000
+
+func _on_player_ship_hit():
+    incident_timer.queue_free()
 
 func _on_resources_expended(amount: int):
     resources_expended += amount
@@ -89,3 +99,4 @@ func _on_incident_1_resolved():
 func _ready():
     Events.connect("incident_1_begin", _on_incident_1_begin)
     Events.connect("resources_expended", _on_resources_expended)
+    Events.connect("player_ship_hit", _on_player_ship_hit)
