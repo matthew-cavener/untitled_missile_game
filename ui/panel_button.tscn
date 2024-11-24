@@ -17,28 +17,18 @@
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_iegre"]
 streams_count = 5
 stream_0/stream = ExtResource("3_7gcal")
-stream_0/weight = 1.0
 stream_1/stream = ExtResource("4_f4pmx")
-stream_1/weight = 1.0
 stream_2/stream = ExtResource("5_c31sv")
-stream_2/weight = 1.0
 stream_3/stream = ExtResource("6_mqrfl")
-stream_3/weight = 1.0
 stream_4/stream = ExtResource("7_besxa")
-stream_4/weight = 1.0
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_0fn4d"]
 streams_count = 5
 stream_0/stream = ExtResource("8_oy708")
-stream_0/weight = 1.0
 stream_1/stream = ExtResource("9_dlo0j")
-stream_1/weight = 1.0
 stream_2/stream = ExtResource("10_dxj2n")
-stream_2/weight = 1.0
 stream_3/stream = ExtResource("11_6wrco")
-stream_3/weight = 1.0
 stream_4/stream = ExtResource("12_1dowx")
-stream_4/weight = 1.0
 
 [node name="PanelButton" type="TextureButton"]
 offset_right = 40.0

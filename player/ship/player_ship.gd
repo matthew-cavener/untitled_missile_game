@@ -98,10 +98,10 @@ func _ready():
     Events.connect("launch_tube_5", _on_launch_tube_5)
     Events.connect("launch_tube_6", _on_launch_tube_6)
     add_to_group("player")
-    print("\n----------------")
-    print("player ship spwaned")
-    print("global_position.x: " + str(global_position.x) + " | global_position.y:" + str(global_position.y))
-    print("----------------\n")
+    #print("\n----------------")
+    #print("player ship spwaned")
+    #print("global_position.x: " + str(global_position.x) + " | global_position.y:" + str(global_position.y))
+    #print("----------------\n")
 
 func _integrate_forces(state) -> void:
     pass
