@@ -54,9 +54,9 @@ func _on_button_1_pressed() -> void:
             label_1.text = ""
             label_2.text = world.incidents["incident1"].get_details()["name"]
             label_3.text = world.incidents["incident2"].get_details()["name"] if world.incidents["incident1"].get_details()["incident_report_submitted"] else ""
-            label_4.text = ""
+            label_4.text = world.incidents["incident3"].get_details()["name"] if world.incidents["incident2"].get_details()["incident_report_submitted"] else ""
             label_5.text = "Main Menu"
-            label_6.text = ""
+            label_6.text = world.incidents["incident4"].get_details()["name"] if world.incidents["incident3"].get_details()["incident_report_submitted"] else ""
             label_7.text = ""
             label_8.text = ""
         DisplayState.RADAR:
@@ -135,6 +135,15 @@ func _on_button_4_pressed() -> void:
             else:
                 selected_incident = "3"
                 central_text.text = "No incident report found.\nIf you are currently experiencing an incident, please Clock-In."
+        DisplayState.DEAD:
+            label_1.text = "There's"
+            label_2.text = "Nothing"
+            label_3.text = "Left"
+            label_4.text = "Clock-In"
+            label_5.text = "You"
+            label_6.text = "Are"
+            label_7.text = "Dead"
+            label_8.text = "Quit"
 
 
 func _on_button_5_pressed() -> void:
@@ -178,8 +187,11 @@ func _on_button_6_pressed() -> void:
             Events.emit_signal("launch_tube_4")
             label_6.text = "empty"
         DisplayState.INCIDENTS:
-            selected_incident = "4"
-
+            if world.incidents["incident4"].get_details()["incident_report_submitted"]:
+                central_text.text = world.incidents["incident4"].get_details()["description"]
+            else:
+                selected_incident = "4"
+                central_text.text = "No incident report found.\nIf you are currently experiencing an incident, please Clock-In."
 
 func _on_button_7_pressed() -> void:
     match display_state:
@@ -191,7 +203,11 @@ func _on_button_7_pressed() -> void:
             Events.emit_signal("launch_tube_5")
             label_7.text = "empty"
         DisplayState.INCIDENTS:
-            selected_incident = "5"
+            if world.incidents["incident5"].get_details()["incident_report_submitted"]:
+                central_text.text = world.incidents["incident5"].get_details()["description"]
+            else:
+                selected_incident = "5"
+                central_text.text = "No incident report found.\nIf you are currently experiencing an incident, please Clock-In."
 
 
 func _on_button_8_pressed() -> void:
@@ -204,7 +220,12 @@ func _on_button_8_pressed() -> void:
             Events.emit_signal("launch_tube_6")
             label_8.text = "empty"
         DisplayState.INCIDENTS:
-            selected_incident = "6"
+            pass
+            # if world.incidents["incident6"].get_details()["incident_report_submitted"]:
+            #     central_text.text = world.incidents["incident6"].get_details()["description"]
+            # else:
+            #     selected_incident = "6"
+            #     central_text.text = "No incident report found.\nIf you are currently experiencing an incident, please Clock-In."
         DisplayState.DEAD:
             label_1.text = "You"
             label_2.text = "Are"
@@ -263,6 +284,6 @@ func _on_incident_resolved() -> void:
     any resource expended by the employee
     in the course of the employee's duties.
     If you believe your employer has
-    violated this regulation, please
-    contact your local labor board.
+    violated this law, please contact
+    the Jovian Labor Relations Board.
     "

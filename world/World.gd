@@ -4,15 +4,14 @@ var incidents = {
     "incident1": preload("res://incidents/incident_1/incident_1.tscn").instantiate(),
     "incident2": preload("res://incidents/incident_2/incident_2.tscn").instantiate(),
     "incident3": preload("res://incidents/incident_3/incident_3.tscn").instantiate(),
-    # "incident4": preload("res://incidents/incident_4/incident_4.tscn").instantiate(),
-    # "incident5": preload("res://incidents/incident_5/incident_5.tscn").instantiate(),
+    "incident4": preload("res://incidents/incident_4/incident_4.tscn").instantiate(),
+    "incident5": preload("res://incidents/incident_5/incident_5.tscn").instantiate(),
     # "incident6": preload("res://incidents/incident_6/incident_6.tscn").instantiate()
 }
 
 func _ready():
     for incident in incidents:
         add_child(incidents[incident])
-
 
 func get_salary_paid() -> int:
     var total_salary_paid = 0
@@ -28,13 +27,6 @@ func get_max_bonus() -> int:
             total_max_bonus += incidents[incident]["max_bonus"]
     return total_max_bonus
 
-func get_total_resources_provided() -> int:
-    var total_resources_provided = 0
-    for incident in incidents:
-        if incidents[incident]["incident_resolved"]:
-            total_resources_provided += incidents[incident].get_resources_provided()
-    return total_resources_provided
-
 func get_resources_expended() -> int:
     var total_resources_expended = 0
     for incident in incidents:
@@ -48,9 +40,10 @@ func get_performance_bonus_percentage(total_resources_provided, total_resources_
     return total_resources_expended / total_resources_provided
 
 func get_total_compensation() -> int:
-    return get_salary_paid() + get_max_bonus() * get_performance_bonus_percentage(get_total_resources_provided(), get_resources_expended())
+    return get_salary_paid() + get_max_bonus() - get_resources_expended()
 
 func get_final_display_text() -> String:
+    $Ambiance.stop()
     var compensation = get_total_compensation()
     var final_display_text = ""
 

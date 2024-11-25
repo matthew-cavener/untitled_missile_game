@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://bb6g7w1ru1jr4"]
+[gd_scene load_steps=6 format=3 uid="uid://bb6g7w1ru1jr4"]
 
 [ext_resource type="Script" path="res://player/ship/player_ship.gd" id="1_hdatc"]
 [ext_resource type="PackedScene" uid="uid://lph3b30dgdlx" path="res://assets/visual/radar_contact.tscn" id="2_x6xbl"]
 [ext_resource type="AudioStream" uid="uid://bnv1btiflaydi" path="res://assets/audio/sonar-punchy.mp3" id="3_dyk86"]
-[ext_resource type="AudioStream" uid="uid://hqnhj3xa7bwr" path="res://assets/audio/launch-alert.wav" id="4_dr20f"]
+[ext_resource type="AudioStream" uid="uid://ctwrwh17ygl3s" path="res://assets/audio/new-launch-alert.wav" id="4_el3sy"]
+[ext_resource type="AudioStream" uid="uid://bm6l502r3p8m3" path="res://assets/audio/new-launch-sound.mp3" id="5_di54m"]
 
 [node name="PlayerShip" type="RigidBody2D"]
 script = ExtResource("1_hdatc")
@@ -15,5 +16,8 @@ scale = Vector2(0.031, 0.031)
 scale = Vector2(0.031, 0.031)
 stream = ExtResource("3_dyk86")
 
-[node name="MissileLaunchSound" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("4_dr20f")
+[node name="MissileLaunchAlert" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_el3sy")
+
+[node name="LaunchSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_di54m")

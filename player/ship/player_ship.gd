@@ -61,7 +61,7 @@ func _on_ping(ping_source: Node) -> void:
     draw_passive_sensor_line(ping_source)
 
 func _on_missile_launched(launch_source: Node, boost_time: float) -> void:
-    $MissileLaunchSound.play(4.76)
+    $MissileLaunchAlert.play(13.78)
     draw_passive_sensor_line(launch_source, boost_time)
 
 func draw_passive_sensor_line(source: Node, decay_time: float = 1) -> void:
@@ -77,6 +77,7 @@ func draw_passive_sensor_line(source: Node, decay_time: float = 1) -> void:
 
 func launch_tube_contents(tube_contents):
     if tube_contents:
+        $LaunchSound.play()
         match tube_contents["type"]:
             "missile":
                 var missile = missile_scene.instantiate()
@@ -95,6 +96,7 @@ func launch_tube_contents(tube_contents):
 
 func on_hit() -> void:
     Events.emit_signal("player_ship_hit")
+    queue_free()
 
 func _ready():
     Events.connect("ping", _on_ping)
