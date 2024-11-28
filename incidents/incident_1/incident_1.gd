@@ -8,14 +8,15 @@ var resources_expended = 0
 var salary = 2320
 var max_bonus = 13333 - salary
 var bonus = 0
+var incident_started = false
 var incident_resolved = false
 var incident_resolution_time = 35
 var incident_timer = Timer.new()
 
 var player_ship_tube_1_contents = {
     "type": "missile",
-    "display_name": "VACM-161 SM-3 Block IIA\nAutonomous Missile Interceptor",
-    "resource_cost": 3000,
+    "display_name": "VACM-161 SM-3 Block IIA\nAutonomous Missile Interceptor\nCost: 10k",
+    "resource_cost": 10000,
     "seeker_has_ping": false,
     "group": "player_missiles",
     "intended_target": "enemy_missiles",
@@ -58,24 +59,26 @@ func get_details():
         "description": "
             Date: 1993-02-09
             Location: Callisto - Ganymede transfer orbit
-            Incident Report: Single RADAR contact, no casualties.
-            Resource expended: " + str(resources_expended),
+            Incident Report: Single RADAR contact
+            Single Active RADAR homing missile deployed by contact,
+            No casualties.
+            Resources expended: " + str(resources_expended),
         
         "resources_expended": resources_expended,
         "incident_report_submitted": incident_resolved,
     }
     return details
 
-func get_resouces_provided():
-    return 3000
-
 func _on_player_ship_hit():
-    incident_timer.queue_free()
+    if not incident_resolved:
+        incident_timer.queue_free()
 
 func _on_resources_expended(amount: int):
-    resources_expended += amount
+    if incident_started && not incident_resolved:
+        resources_expended += amount
 
 func _on_incident_1_begin():
+    incident_started = true
     incident_timer.wait_time = incident_resolution_time
     incident_timer.one_shot = true
     incident_timer.timeout.connect(_on_incident_1_resolved)

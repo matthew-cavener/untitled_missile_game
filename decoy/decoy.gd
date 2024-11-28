@@ -5,6 +5,7 @@ enum DecoyState { STOWED, DEPLOYING, DEPLOYED, SPENT}
 var decoy_state: DecoyState = DecoyState.DEPLOYING
 var state_name: String = "DEPLOYING"
 
+var resource_cost: int
 var display_name: String
 var group: String
 var lifetime: float
@@ -17,9 +18,10 @@ var thrust_timer: Timer = Timer.new()
 var lifetime_timer: Timer = Timer.new()
 
 func set_parameters(parameters: Dictionary = {}) -> void:
-    display_name = parameters.get("display_name", "DEFAULT-1 Chaff Block N")
+    resource_cost = parameters.get("resource_cost", 300)
+    display_name = parameters.get("display_name", "DEFAULT-1 Chaff\nPlaceholder Decoy")
     group = parameters.get("group", "decoys")
-    lifetime = parameters.get("lifetime", 12)
+    lifetime = parameters.get("lifetime", 6)
     thrust_time = parameters.get("thrust_time", 1)
     thrust_magnitude = parameters.get("thrust_magnitude", 3)
     launch_bearing = deg_to_rad(parameters.get("launch_bearing", 0) + 270)
@@ -37,9 +39,11 @@ func _ready():
     add_to_group(group)
     setup_timer(thrust_timer, thrust_time, _on_thrust_timer_timeout)
     setup_timer(lifetime_timer, lifetime, _on_lifetime_timer_timeout)
+    lifetime_timer.start()
     thrust_timer.start()
 
 func launch():
+    Events.emit_signal("resources_expended", resource_cost)
     decoy_state = DecoyState.DEPLOYING
     state_name = "DEPLOYING"
 

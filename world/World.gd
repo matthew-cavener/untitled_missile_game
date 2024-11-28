@@ -4,15 +4,20 @@ var incidents = {
     "incident1": preload("res://incidents/incident_1/incident_1.tscn").instantiate(),
     "incident2": preload("res://incidents/incident_2/incident_2.tscn").instantiate(),
     "incident3": preload("res://incidents/incident_3/incident_3.tscn").instantiate(),
-    # "incident4": preload("res://incidents/incident_4/incident_4.tscn").instantiate(),
-    # "incident5": preload("res://incidents/incident_5/incident_5.tscn").instantiate(),
-    # "incident6": preload("res://incidents/incident_6/incident_6.tscn").instantiate()
+    "incident4": preload("res://incidents/incident_4/incident_4.tscn").instantiate(),
+    "incident5": preload("res://incidents/incident_5/incident_5.tscn").instantiate(),
+    "incident6": preload("res://incidents/incident_6/incident_6.tscn").instantiate()
 }
 
+var player_status = "Alive"
+
 func _ready():
+    Events.connect("player_ship_hit", _on_player_ship_hit)
     for incident in incidents:
         add_child(incidents[incident])
 
+func _on_player_ship_hit():
+    player_status = "Dead"
 
 func get_salary_paid() -> int:
     var total_salary_paid = 0
@@ -28,13 +33,6 @@ func get_max_bonus() -> int:
             total_max_bonus += incidents[incident]["max_bonus"]
     return total_max_bonus
 
-func get_total_resources_provided() -> int:
-    var total_resources_provided = 0
-    for incident in incidents:
-        if incidents[incident]["incident_resolved"]:
-            total_resources_provided += incidents[incident].get_resources_provided()
-    return total_resources_provided
-
 func get_resources_expended() -> int:
     var total_resources_expended = 0
     for incident in incidents:
@@ -42,22 +40,18 @@ func get_resources_expended() -> int:
             total_resources_expended += incidents[incident]["resources_expended"]
     return total_resources_expended
 
-func get_performance_bonus_percentage(total_resources_provided, total_resources_expended) -> int:
-    if total_resources_provided == 0:
-        return 0
-    return total_resources_expended / total_resources_provided
-
 func get_total_compensation() -> int:
-    return get_salary_paid() + get_max_bonus() * get_performance_bonus_percentage(get_total_resources_provided(), get_resources_expended())
+    return get_salary_paid() + get_max_bonus() - get_resources_expended()
 
 func get_final_display_text() -> String:
+    $Ambiance.stop()
     var compensation = get_total_compensation()
     var final_display_text = ""
 
     # first incident not completed
     if compensation < 2320:
         final_display_text = "
-            You are dead.
+            You are " + player_status + ".
             Your family cannot afford air.
             Your family cannot afford water.
             Your family cannot afford food.
@@ -73,7 +67,7 @@ func get_final_display_text() -> String:
     # second incident not completed
     elif compensation < 4640:
         final_display_text = "
-            You are dead.
+            You are " + player_status + ".
             Your family can afford air.
             Your family cannot afford water.
             Your family cannot afford food.
@@ -87,7 +81,7 @@ func get_final_display_text() -> String:
             "
     elif compensation < 12000:
         final_display_text = "
-            You are dead.
+            You are " + player_status + ".
             Your family can afford air.
             Your family can afford water.
             Your family cannot afford food.
@@ -101,7 +95,7 @@ func get_final_display_text() -> String:
             "
     elif compensation < 25000:
         final_display_text = "
-            You are dead.
+            You are " + player_status + ".
             Your family can afford air.
             Your family can afford water.
             Your family can afford food.
@@ -115,7 +109,7 @@ func get_final_display_text() -> String:
             "
     elif compensation < 50000:
         final_display_text = "
-            You are dead.
+            You are " + player_status + ".
             Your family can afford air.
             Your family can afford water.
             Your family can afford food.
@@ -129,7 +123,7 @@ func get_final_display_text() -> String:
             "
     else:
         final_display_text = "
-            You are dead.
+            You are " + player_status + ".
             Your family can afford air.
             Your family can afford water.
             Your family can afford food.

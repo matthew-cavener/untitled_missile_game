@@ -25,6 +25,8 @@ signal incident_4_begin
 signal incident_5_begin
 signal incident_6_begin
 
+signal incident_6_resolved
+
 signal player_ship_hit
 
 signal ping(ping_source: Node)
