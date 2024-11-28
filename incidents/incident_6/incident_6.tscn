@@ -1,3 +1,6 @@
-[gd_scene format=3 uid="uid://liwl2cr4wvlr"]
+[gd_scene load_steps=2 format=3 uid="uid://liwl2cr4wvlr"]
+
+[ext_resource type="Script" path="res://incidents/incident_6/incident_6.gd" id="1_1x2gt"]
 
 [node name="Incident6" type="Node2D"]
+script = ExtResource("1_1x2gt")

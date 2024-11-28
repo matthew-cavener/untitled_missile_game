@@ -1,6 +1,6 @@
 extends Control
 
-enum DisplayState {BOOT, RADAR, ORDNANCE, INCIDENTS, DEAD}
+enum DisplayState {BOOT, RADAR, ORDNANCE, INCIDENTS, DEAD, CONTRACT_COMPLETE}
 
 var display_state: DisplayState = DisplayState.BOOT
 var selected_incident: String = "NONE"
@@ -42,6 +42,7 @@ func _ready() -> void:
     Events.connect("button_8_pressed", _on_button_8_pressed)
 
     Events.connect("incident_resolved", _on_incident_resolved)
+    Events.connect("incident_6_resolved", _on_incident_6_resolved)
     Events.connect("player_ship_hit", _on_player_ship_hit)
 
 
@@ -57,8 +58,8 @@ func _on_button_1_pressed() -> void:
             label_4.text = world.incidents["incident3"].get_details()["name"] if world.incidents["incident2"].get_details()["incident_report_submitted"] else ""
             label_5.text = "Main Menu"
             label_6.text = world.incidents["incident4"].get_details()["name"] if world.incidents["incident3"].get_details()["incident_report_submitted"] else ""
-            label_7.text = ""
-            label_8.text = ""
+            label_7.text = world.incidents["incident5"].get_details()["name"] if world.incidents["incident4"].get_details()["incident_report_submitted"] else ""
+            label_8.text = world.incidents["incident6"].get_details()["name"] if world.incidents["incident5"].get_details()["incident_report_submitted"] else ""
         DisplayState.RADAR:
             pass
         DisplayState.ORDNANCE:
@@ -144,6 +145,16 @@ func _on_button_4_pressed() -> void:
             label_6.text = "Are"
             label_7.text = "Dead"
             label_8.text = "Quit"
+            central_text.text = world.get_final_display_text()
+        DisplayState.CONTRACT_COMPLETE:
+            label_1.text = "There's"
+            label_2.text = "No"
+            label_3.text = "Work"
+            label_4.text = "Clock-In"
+            label_5.text = "Your"
+            label_6.text = "Contract"
+            label_7.text = "Expired"
+            label_8.text = "Quit"
 
 
 func _on_button_5_pressed() -> void:
@@ -220,12 +231,11 @@ func _on_button_8_pressed() -> void:
             Events.emit_signal("launch_tube_6")
             label_8.text = "empty"
         DisplayState.INCIDENTS:
-            pass
-            # if world.incidents["incident6"].get_details()["incident_report_submitted"]:
-            #     central_text.text = world.incidents["incident6"].get_details()["description"]
-            # else:
-            #     selected_incident = "6"
-            #     central_text.text = "No incident report found.\nIf you are currently experiencing an incident, please Clock-In."
+            if world.incidents["incident6"].get_details()["incident_report_submitted"]:
+                central_text.text = world.incidents["incident6"].get_details()["description"]
+            else:
+                selected_incident = "6"
+                central_text.text = "No incident report found.\nIf you are currently experiencing an incident, please Clock-In."
         DisplayState.DEAD:
             label_1.text = "You"
             label_2.text = "Are"
@@ -234,6 +244,16 @@ func _on_button_8_pressed() -> void:
             label_5.text = "It's"
             label_6.text = "Too"
             label_7.text = "Late"
+            label_8.text = "Quit"
+            central_text.text = world.get_final_display_text()
+        DisplayState.CONTRACT_COMPLETE:
+            label_1.text = "Your"
+            label_2.text = "Contract"
+            label_3.text = "Expired"
+            label_4.text = "Clock-In"
+            label_5.text = "You're"
+            label_6.text = "Already"
+            label_7.text = "Unemployed"
             label_8.text = "Quit"
 
 func _on_player_ship_hit() -> void:
@@ -287,3 +307,17 @@ func _on_incident_resolved() -> void:
     violated this law, please contact
     the Jovian Labor Relations Board.
     "
+
+func _on_incident_6_resolved() -> void:
+    display_state = DisplayState.CONTRACT_COMPLETE
+    world.visible = false
+    selected_incident = "NONE"
+    label_1.text = "Your"
+    label_2.text = "Contract"
+    label_3.text = "Expired"
+    label_4.text = "Clock-In"
+    label_5.text = "Your"
+    label_6.text = "Contract"
+    label_7.text = "Expired"
+    label_8.text = "Quit"
+    central_text.text = world.get_final_display_text()
