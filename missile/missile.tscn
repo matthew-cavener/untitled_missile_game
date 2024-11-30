@@ -1,7 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://bt7h7c4hbu2gf"]
+[gd_scene load_steps=4 format=3 uid="uid://bt7h7c4hbu2gf"]
 
 [ext_resource type="Script" path="res://missile/missile.gd" id="1_4x3j5"]
 [ext_resource type="PackedScene" uid="uid://lph3b30dgdlx" path="res://assets/visual/radar_contact.tscn" id="2_2m5th"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_cqv5h"]
+radius = 8.0
 
 [node name="Missile" type="RigidBody2D"]
 collision_layer = 0
@@ -9,4 +12,12 @@ collision_mask = 0
 script = ExtResource("1_4x3j5")
 
 [node name="RadarContact" parent="." instance=ExtResource("2_2m5th")]
+visible = false
 scale = Vector2(0.031, 0.031)
+
+[node name="MissileCollisionArea" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 0
+
+[node name="MissileCollisionArea" type="CollisionShape2D" parent="MissileCollisionArea"]
+shape = SubResource("CircleShape2D_cqv5h")

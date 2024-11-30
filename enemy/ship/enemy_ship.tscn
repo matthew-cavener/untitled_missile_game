@@ -1,10 +1,21 @@
-[gd_scene load_steps=3 format=3 uid="uid://d35aca7otvy67"]
+[gd_scene load_steps=4 format=3 uid="uid://d35aca7otvy67"]
 
 [ext_resource type="Script" path="res://enemy/ship/enemy_ship.gd" id="1_solrs"]
 [ext_resource type="PackedScene" uid="uid://lph3b30dgdlx" path="res://assets/visual/radar_contact.tscn" id="2_6t4ip"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_6y4iw"]
+radius = 8.0
 
 [node name="EnemyShip" type="RigidBody2D"]
 script = ExtResource("1_solrs")
 
 [node name="RadarContact" parent="." instance=ExtResource("2_6t4ip")]
+visible = false
 scale = Vector2(0.031, 0.031)
+
+[node name="EnemyShipCollisionArea" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 0
+
+[node name="EnemyShipCollisionArea" type="CollisionShape2D" parent="EnemyShipCollisionArea"]
+shape = SubResource("CircleShape2D_6y4iw")

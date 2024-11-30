@@ -1,9 +1,12 @@
+# @tool
 extends RigidBody2D
+
 
 var set_initial_state = true
 
 var missile_scene = preload("res://missile/missile.tscn")
 var decoy_scene = preload("res://decoy/decoy.tscn")
+var radar_contact_texture= preload("res://assets/visual/radar_contact.tscn").instantiate().texture
 
 var tube_1_contents
 var tube_2_contents
@@ -64,7 +67,7 @@ func _on_missile_launched(launch_source: Node, boost_time: float) -> void:
     $MissileLaunchAlert.play(13.78)
     draw_passive_sensor_line(launch_source, boost_time)
 
-func draw_passive_sensor_line(source: Node, decay_time: float = 1) -> void:
+func draw_passive_sensor_line(source: Node, decay_time: float = 3) -> void:
     var direction = (source.global_position - global_position).normalized()
     var line = Line2D.new()
     var tween = create_tween()
@@ -99,6 +102,12 @@ func on_hit() -> void:
     queue_free()
 
 func _ready():
+    var tween = create_tween()
+    $RadarSweepLine.rotation_degrees = 0
+    $RadarSweepLine/RadarSweepArea/RadarSweepCollision.rotation_degrees = 0
+    tween.tween_property($RadarSweepLine, "rotation_degrees", 360, 3).from_current()
+    tween.set_loops()
+
     Events.connect("ping", _on_ping)
     Events.connect("launch_tube_1", _on_launch_tube_1)
     Events.connect("launch_tube_2", _on_launch_tube_2)
@@ -115,3 +124,26 @@ func _ready():
 
 func _integrate_forces(state) -> void:
     pass
+
+#func _on_radar_sweep_area_area_entered(area: Area2D) -> void:
+    #var radar_contact = Sprite2D.new()
+    #radar_contact.texture = radar_contact_texture
+    #radar_contact.scale = Vector2(0.031, 0.031)
+    #var area_parent = area.get_parent()
+    #radar_contact.global_position = area_parent.global_position - global_position
+    #add_child(radar_contact)
+    #var tween = create_tween()
+    #tween.tween_property(radar_contact, "modulate:a", 0, 6)
+    #tween.tween_callback(radar_contact.queue_free)
+
+
+func _on_radar_sweep_area_area_exited(area: Area2D) -> void:
+    var radar_contact = Sprite2D.new()
+    radar_contact.texture = radar_contact_texture
+    radar_contact.scale = Vector2(0.031, 0.031)
+    var area_parent = area.get_parent()
+    radar_contact.global_position = area_parent.global_position - global_position
+    add_child(radar_contact)
+    var tween = create_tween()
+    tween.tween_property(radar_contact, "modulate:a", 0, 6)
+    tween.tween_callback(radar_contact.queue_free)

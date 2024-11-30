@@ -1,10 +1,21 @@
-[gd_scene load_steps=3 format=3 uid="uid://d2d6qt3dj5ysj"]
+[gd_scene load_steps=4 format=3 uid="uid://d2d6qt3dj5ysj"]
 
 [ext_resource type="Script" path="res://decoy/decoy.gd" id="1_w8b77"]
 [ext_resource type="PackedScene" uid="uid://lph3b30dgdlx" path="res://assets/visual/radar_contact.tscn" id="2_vt415"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_r62tp"]
+radius = 8.0
 
 [node name="Decoy" type="RigidBody2D"]
 script = ExtResource("1_w8b77")
 
 [node name="RadarContact" parent="." instance=ExtResource("2_vt415")]
+visible = false
 scale = Vector2(0.031, 0.031)
+
+[node name="DecoyCollisionArea" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 0
+
+[node name="DecoyCollisionArea" type="CollisionShape2D" parent="DecoyCollisionArea"]
+shape = SubResource("CircleShape2D_r62tp")
