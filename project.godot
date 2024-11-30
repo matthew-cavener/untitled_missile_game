@@ -32,11 +32,8 @@ animation_library={
 [layer_names]
 
 2d_physics/layer_1="environment"
-2d_physics/layer_2="player-ship"
-2d_physics/layer_3="enemy-ships"
-2d_physics/layer_4="player-missiles"
-2d_physics/layer_5="enemy-missiles"
-2d_physics/layer_6="decoys"
+2d_physics/layer_2="radar"
+2d_physics/layer_3="radar-contacts"
 
 [physics]
 

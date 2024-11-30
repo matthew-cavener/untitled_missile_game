@@ -21,3 +21,19 @@ stream = ExtResource("4_el3sy")
 
 [node name="LaunchSound" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("5_di54m")
+
+[node name="RadarSweepLine" type="Line2D" parent="."]
+scale = Vector2(1, 0.999766)
+points = PackedVector2Array(0, 0, 0, -1000)
+width = 1.0
+default_color = Color(1, 0.690196, 0, 1)
+
+[node name="RadarSweepArea" type="Area2D" parent="RadarSweepLine"]
+collision_layer = 2
+collision_mask = 4
+
+[node name="RadarSweepCollision" type="CollisionPolygon2D" parent="RadarSweepLine/RadarSweepArea"]
+polygon = PackedVector2Array(0, 0, -8, -24.0056, -8, -1000.23, 8, -1000.23, 8, -24.0056)
+one_way_collision_margin = 0.0
+
+[connection signal="area_exited" from="RadarSweepLine/RadarSweepArea" to="." method="_on_radar_sweep_area_area_exited"]
