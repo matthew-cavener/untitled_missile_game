@@ -33,7 +33,7 @@ collision_layer = 2
 collision_mask = 4
 
 [node name="RadarSweepCollision" type="CollisionPolygon2D" parent="RadarSweepLine/RadarSweepArea"]
-polygon = PackedVector2Array(0, 0, -8, -24.0056, -8, -1000.23, 8, -1000.23, 8, -24.0056)
+polygon = PackedVector2Array(0, 0, 0, -1000.23, 64, -1000.23, 64, -64.015)
 one_way_collision_margin = 0.0
 
 [connection signal="area_exited" from="RadarSweepLine/RadarSweepArea" to="." method="_on_radar_sweep_area_area_exited"]
