@@ -16,7 +16,7 @@ var selected_incident: String = "NONE"
 @onready var label_8: Label = $VBoxContainer/RightTextPanel/Label8
 
 @onready var world: Node2D = get_tree().get_first_node_in_group("world")
-@onready var central_text: Label = $VBoxContainer/CenterDisplay/CentralText
+@onready var central_text: Label = $VBoxContainer/CentralText
 
 func _ready() -> void:
     world.visible = false

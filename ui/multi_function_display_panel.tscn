@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://67f8uqxwgsxf"]
+[gd_scene load_steps=6 format=3 uid="uid://67f8uqxwgsxf"]
 
 [ext_resource type="PackedScene" uid="uid://b8sqw4ayd2bre" path="res://ui/left_button_panel.tscn" id="1_kwx1i"]
 [ext_resource type="PackedScene" uid="uid://cx1cl51q5v2gw" path="res://ui/display.tscn" id="2_um87o"]
 [ext_resource type="PackedScene" uid="uid://ct82xuv03s3vg" path="res://ui/right_button_panel.tscn" id="3_aneim"]
+[ext_resource type="Theme" uid="uid://ctj8sc6btx4hc" path="res://theme.tres" id="3_bqikc"]
 [ext_resource type="PackedScene" uid="uid://dg0e1sxtg5ffn" path="res://world/world.tscn" id="3_lyras"]
 
 [node name="MultiFunctionDisplayPanel" type="Control"]
@@ -45,6 +46,7 @@ size_flags_horizontal = 3
 clip_contents = true
 layout_mode = 2
 size_flags_stretch_ratio = 4.0
+theme = ExtResource("3_bqikc")
 
 [node name="World" parent="MFDVerticalBox/Display" instance=ExtResource("3_lyras")]
 position = Vector2(380, 328)

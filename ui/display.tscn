@@ -42,12 +42,12 @@ layout_mode = 2
 size_flags_horizontal = 3
 alignment = 1
 
-[node name="CenterDisplay" type="CenterContainer" parent="VBoxContainer"]
-layout_mode = 2
-
-[node name="CentralText" type="Label" parent="VBoxContainer/CenterDisplay"]
+[node name="CentralText" type="Label" parent="VBoxContainer"]
 modulate = Color(1, 0.690196, 0, 1)
+custom_minimum_size = Vector2(256, 0)
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
 text = "Welcome To JovEx SSDS OS
 
 version 0.6.23rc.4
@@ -57,6 +57,8 @@ All Rights Reserved
 JovEx is a registered trademark of  Jovian Express Corp."
 horizontal_alignment = 1
 vertical_alignment = 1
+autowrap_mode = 3
+text_overrun_behavior = 4
 
 [node name="RightTextPanel" parent="VBoxContainer" instance=ExtResource("2_yxs6y")]
 custom_minimum_size = Vector2(128, 0)
