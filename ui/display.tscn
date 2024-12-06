@@ -66,6 +66,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
+visible = false
 
 [node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
 material = SubResource("ShaderMaterial_ot5tt")

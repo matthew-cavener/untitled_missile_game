@@ -3,7 +3,7 @@ render_mode unshaded, skip_vertex_transform;
 
 const float curvature = 7.0;
 const float vignette_multiplier = 0.5;
-const float scanlines_multiplier = 0.25;
+const float scanlines_multiplier = 0.06;
 const float scanlines_brightness_offset = 0.75;
 const float blur_intensity = 0.003; // Intensity of the smear effect
 const int blur_samples = 6; // Number of samples for the smear effect
