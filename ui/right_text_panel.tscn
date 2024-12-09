@@ -16,6 +16,7 @@ modulate = Color(1, 0.690196, 0, 1)
 layout_mode = 2
 text = "Label 5"
 horizontal_alignment = 2
+vertical_alignment = 1
 
 [node name="Spacer2" type="Control" parent="."]
 layout_mode = 2
@@ -26,6 +27,7 @@ modulate = Color(1, 0.690196, 0, 1)
 layout_mode = 2
 text = "Label 6"
 horizontal_alignment = 2
+vertical_alignment = 1
 
 [node name="Spacer3" type="Control" parent="."]
 layout_mode = 2
@@ -36,6 +38,7 @@ modulate = Color(1, 0.690196, 0, 1)
 layout_mode = 2
 text = "Label 7"
 horizontal_alignment = 2
+vertical_alignment = 1
 
 [node name="Spacer4" type="Control" parent="."]
 layout_mode = 2
@@ -46,6 +49,7 @@ modulate = Color(1, 0.690196, 0, 1)
 layout_mode = 2
 text = "Label 8"
 horizontal_alignment = 2
+vertical_alignment = 1
 
 [node name="Spacer5" type="Control" parent="."]
 layout_mode = 2

@@ -23,6 +23,10 @@ Events="*res://Events.gd"
 
 window/stretch/mode="canvas_items"
 
+[gui]
+
+theme/custom="res://theme.tres"
+
 [importer_defaults]
 
 animation_library={
