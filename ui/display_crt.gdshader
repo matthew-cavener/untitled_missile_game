@@ -1,13 +1,13 @@
 shader_type canvas_item;
 render_mode unshaded, skip_vertex_transform;
 
-const float curvature = 7.0;
-const float vignette_multiplier = 0.5;
+const float curvature = 100.0;
+const float vignette_multiplier = 0.33;
 const float scanlines_multiplier = 0.06;
-const float scanlines_brightness_offset = 0.75;
-const float blur_intensity = 0.003; // Intensity of the smear effect
-const int blur_samples = 6; // Number of samples for the smear effect
-const float blur_decay = 3.0; // Decay of the smear effect
+const float scanlines_brightness_offset = 0.33;
+const float blur_intensity = 0.003;
+const int blur_samples = 2;
+const float blur_decay = 3.0;
 
 uniform sampler2D screen_texture: hint_screen_texture, filter_linear_mipmap;
 
@@ -25,13 +25,14 @@ void fragment() {
     // Sample the texture multiple times with offsets to the right
     for (int i = 0; i < blur_samples; i++) {
         float offset = float(i) * blur_intensity;
-        vec2 sample_uv = (warped_uv + vec2(offset, 0.0) + 1.0) / 2.0; // Add offset to move samples to the right
-        float weight = pow(blur_decay, float(i)); // Weight decreases with each sample based on blur_decay
-        screen_color += textureLod(screen_texture, sample_uv, 0.0).rgb * weight;
+        vec2 sample_uv = (warped_uv + vec2(offset, 0.0) + 1.0) / 2.0;
+        float weight = pow(blur_decay, float(i));
+        vec3 sample_color = textureLod(screen_texture, sample_uv, 0.0).rgb * weight;
+        
+        screen_color = mix(screen_color, sample_color, weight / (total_weight + weight));
         total_weight += weight;
     }
 
-    screen_color /= total_weight; // Normalize the color
     screen_color *= cutoff * scanlines;
     screen_color -= vignette * vignette_multiplier;
     COLOR = vec4(screen_color, 1.0);

@@ -74,6 +74,7 @@ func draw_passive_sensor_line(source: Node, decay_time: float = 3) -> void:
     line.width = 1
     line.default_color = Color("#ffb000")
     line.points = [position, direction * 1000]
+    line.antialiased = true
     tween.tween_property(line, "default_color:a", 0, decay_time)
     tween.tween_callback(line.queue_free)
     add_child(line)

@@ -1,12 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://cx1cl51q5v2gw"]
+[gd_scene load_steps=4 format=3 uid="uid://cx1cl51q5v2gw"]
 
 [ext_resource type="PackedScene" uid="uid://b3ehmtrkvb7qc" path="res://ui/left_text_panel.tscn" id="1_5nsy1"]
 [ext_resource type="Script" path="res://ui/display.gd" id="1_d2i1s"]
 [ext_resource type="PackedScene" uid="uid://debd8mgq87o6b" path="res://ui/right_text_panel.tscn" id="2_yxs6y"]
-[ext_resource type="Shader" path="res://ui/display_crt.gdshader" id="4_jthn0"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ot5tt"]
-shader = ExtResource("4_jthn0")
 
 [node name="Display" type="Control"]
 layout_mode = 3
@@ -35,6 +31,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="LeftSpacer" type="Control" parent="VBoxContainer"]
+custom_minimum_size = Vector2(4, 0)
+layout_mode = 2
 
 [node name="LeftTextPanel" parent="VBoxContainer" instance=ExtResource("1_5nsy1")]
 custom_minimum_size = Vector2(128, 0)
@@ -65,16 +65,6 @@ custom_minimum_size = Vector2(128, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
-visible = false
-
-[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
-material = SubResource("ShaderMaterial_ot5tt")
-clip_contents = true
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
+[node name="RightSpacer" type="Control" parent="VBoxContainer"]
+custom_minimum_size = Vector2(4, 0)
+layout_mode = 2
