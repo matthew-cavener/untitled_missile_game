@@ -1,31 +1,123 @@
-[gd_scene load_steps=4 format=3 uid="uid://67f8uqxwgsxf"]
+[gd_scene load_steps=10 format=3 uid="uid://67f8uqxwgsxf"]
 
 [ext_resource type="PackedScene" uid="uid://b8sqw4ayd2bre" path="res://ui/left_button_panel.tscn" id="1_kwx1i"]
-[ext_resource type="PackedScene" uid="uid://dg0e1sxtg5ffn" path="res://world/world.tscn" id="2_tx673"]
+[ext_resource type="Script" path="res://ui/multi_function_display_panel.gd" id="1_owumd"]
+[ext_resource type="PackedScene" uid="uid://cx1cl51q5v2gw" path="res://ui/display.tscn" id="2_um87o"]
 [ext_resource type="PackedScene" uid="uid://ct82xuv03s3vg" path="res://ui/right_button_panel.tscn" id="3_aneim"]
+[ext_resource type="PackedScene" uid="uid://dg0e1sxtg5ffn" path="res://world/world.tscn" id="3_lyras"]
+[ext_resource type="Shader" path="res://ui/display_crt.gdshader" id="5_mp8xj"]
+[ext_resource type="Texture2D" uid="uid://dua1gcw3ac7an" path="res://assets/visual/red_bar_round_gloss_large_square.png" id="6_px255"]
+[ext_resource type="FontFile" uid="uid://cblx6sd5gyfog" path="res://assets/visual/Impact Label Reversed.ttf" id="7_vu1or"]
 
-[node name="MultiFunctionDisplayPanel" type="HBoxContainer"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_g8o1p"]
+shader = ExtResource("5_mp8xj")
+
+[node name="MultiFunctionDisplayPanel" type="Control"]
+layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_owumd")
+
+[node name="MFDPanelMetalColor" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -8.0
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.211765, 0.239216, 0.290196, 1)
+
+[node name="MFDVerticalBox" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -8.0
+offset_bottom = 8.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 alignment = 1
 
-[node name="LeftButtonPanel" parent="." instance=ExtResource("1_kwx1i")]
+[node name="LeftButtonPanel" parent="MFDVerticalBox" instance=ExtResource("1_kwx1i")]
 layout_mode = 2
-size_flags_horizontal = 3
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
+[node name="Display" parent="MFDVerticalBox" instance=ExtResource("2_um87o")]
+clip_contents = true
 layout_mode = 2
-size_flags_horizontal = 3
 size_flags_stretch_ratio = 4.0
 
-[node name="World" parent="CenterContainer" instance=ExtResource("2_tx673")]
-position = Vector2(382, 320)
+[node name="CanvasLayer" type="CanvasLayer" parent="MFDVerticalBox/Display"]
+offset = Vector2(196, 0)
+transform = Transform2D(1, 0, 0, 1, 196, 0)
 
-[node name="RightButtonPanel" parent="." instance=ExtResource("3_aneim")]
+[node name="ColorRect" type="ColorRect" parent="MFDVerticalBox/Display/CanvasLayer"]
+material = SubResource("ShaderMaterial_g8o1p")
+anchors_preset = -1
+anchor_right = 0.66
+anchor_bottom = 1.0
+offset_right = -1.32001
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="World" parent="MFDVerticalBox/Display" instance=ExtResource("3_lyras")]
+position = Vector2(380, 328)
+
+[node name="RightButtonPanel" parent="MFDVerticalBox" instance=ExtResource("3_aneim")]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="CIWSIndicator" type="Sprite2D" parent="."]
+position = Vector2(176, 32)
+texture = ExtResource("6_px255")
+
+[node name="UselessIndicator" type="Sprite2D" parent="."]
+position = Vector2(976, 32)
+texture = ExtResource("6_px255")
+
+[node name="CIWSLabel" type="ColorRect" parent="."]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 15.0
+offset_right = 159.0
+offset_bottom = 39.0
+rotation = 0.0349066
+color = Color(0.114897, 0.114897, 0.114897, 1)
+
+[node name="CIWSLabelText" type="Label" parent="CIWSLabel"]
+layout_mode = 0
+offset_right = 153.0
+offset_bottom = 24.0
+theme_override_fonts/font = ExtResource("7_vu1or")
+theme_override_font_sizes/font_size = 21
+text = "CIWS Status"
+horizontal_alignment = 1
+vertical_alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="UselessLabel" type="ColorRect" parent="."]
+layout_mode = 0
+offset_left = 997.0
+offset_top = 20.0
+offset_right = 1107.0
+offset_bottom = 44.0
+rotation = -0.0174533
+color = Color(0.114897, 0.114897, 0.114897, 1)
+
+[node name="UselessLabelText" type="Label" parent="UselessLabel"]
+layout_mode = 0
+offset_right = 112.0
+offset_bottom = 24.0
+theme_override_fonts/font = ExtResource("7_vu1or")
+theme_override_font_sizes/font_size = 21
+text = "USELESS!"
+horizontal_alignment = 1
+vertical_alignment = 1

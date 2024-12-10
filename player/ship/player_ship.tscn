@@ -1,14 +1,45 @@
-[gd_scene load_steps=3 format=3 uid="uid://bb6g7w1ru1jr4"]
+[gd_scene load_steps=7 format=3 uid="uid://bb6g7w1ru1jr4"]
 
-[ext_resource type="Texture2D" uid="uid://c8y1tv2locndd" path="res://assets/visual/Circle.png" id="1_cytsw"]
 [ext_resource type="Script" path="res://player/ship/player_ship.gd" id="1_hdatc"]
+[ext_resource type="PackedScene" uid="uid://lph3b30dgdlx" path="res://assets/visual/radar_contact.tscn" id="2_x6xbl"]
+[ext_resource type="AudioStream" uid="uid://bnv1btiflaydi" path="res://assets/audio/sonar-punchy.mp3" id="3_dyk86"]
+[ext_resource type="AudioStream" uid="uid://ctwrwh17ygl3s" path="res://assets/audio/new-launch-alert.wav" id="4_el3sy"]
+[ext_resource type="AudioStream" uid="uid://cr2yrnvdy5vjy" path="res://assets/audio/new-launch-sound-altered.ogg" id="5_q2rta"]
+[ext_resource type="AudioStream" uid="uid://dra7r2nw2a7jh" path="res://assets/audio/ciws.ogg" id="6_q4ntv"]
 
 [node name="PlayerShip" type="RigidBody2D"]
 script = ExtResource("1_hdatc")
 
-[node name="PlayerShipSprite" type="Sprite2D" parent="."]
-modulate = Color(0, 0, 1, 1)
-scale = Vector2(0.03125, 0.03125)
-texture = ExtResource("1_cytsw")
+[node name="RadarContact" parent="." instance=ExtResource("2_x6xbl")]
+scale = Vector2(0.031, 0.031)
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="RadarPingSound" type="AudioStreamPlayer2D" parent="."]
+scale = Vector2(0.031, 0.031)
+stream = ExtResource("3_dyk86")
+
+[node name="MissileLaunchAlert" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_el3sy")
+
+[node name="LaunchSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_q2rta")
+volume_db = 10.0
+
+[node name="CIWSSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("6_q4ntv")
+volume_db = 10.0
+
+[node name="RadarSweepLine" type="Line2D" parent="."]
+scale = Vector2(1, 0.999766)
+points = PackedVector2Array(0, 0, 0, -1000)
+width = 1.0
+default_color = Color(1, 0.690196, 0, 1)
+
+[node name="RadarSweepArea" type="Area2D" parent="RadarSweepLine"]
+collision_layer = 2
+collision_mask = 4
+
+[node name="RadarSweepCollision" type="CollisionPolygon2D" parent="RadarSweepLine/RadarSweepArea"]
+polygon = PackedVector2Array(0, 0, 0, -1000.23, 64, -1000.23, 64, -64.015)
+one_way_collision_margin = 0.0
+
+[connection signal="area_exited" from="RadarSweepLine/RadarSweepArea" to="." method="_on_radar_sweep_area_area_exited"]

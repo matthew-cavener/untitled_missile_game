@@ -11,8 +11,21 @@ config_version=5
 [application]
 
 config/name="untitled_missile_game"
-config/features=PackedStringArray("4.2", "Mobile")
+run/main_scene="res://ui/multi_function_display_panel.tscn"
+config/features=PackedStringArray("4.3", "Mobile")
 config/icon="res://icon.svg"
+
+[autoload]
+
+Events="*res://Events.gd"
+
+[display]
+
+window/stretch/mode="canvas_items"
+
+[gui]
+
+theme/custom="res://theme.tres"
 
 [importer_defaults]
 
@@ -23,11 +36,8 @@ animation_library={
 [layer_names]
 
 2d_physics/layer_1="environment"
-2d_physics/layer_2="player-ship"
-2d_physics/layer_3="enemy-ships"
-2d_physics/layer_4="player-missiles"
-2d_physics/layer_5="enemy-missiles"
-2d_physics/layer_6="decoys"
+2d_physics/layer_2="radar"
+2d_physics/layer_3="radar-contacts"
 
 [physics]
 

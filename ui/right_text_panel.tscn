@@ -1,0 +1,56 @@
+[gd_scene format=3 uid="uid://debd8mgq87o6b"]
+
+[node name="RightTextPanel" type="VBoxContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Spacer1" type="Control" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Label5" type="Label" parent="."]
+modulate = Color(1, 0.690196, 0, 1)
+layout_mode = 2
+text = "Label 5"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Spacer2" type="Control" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Label6" type="Label" parent="."]
+modulate = Color(1, 0.690196, 0, 1)
+layout_mode = 2
+text = "Label 6"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Spacer3" type="Control" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Label7" type="Label" parent="."]
+modulate = Color(1, 0.690196, 0, 1)
+layout_mode = 2
+text = "Label 7"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Spacer4" type="Control" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Label8" type="Label" parent="."]
+modulate = Color(1, 0.690196, 0, 1)
+layout_mode = 2
+text = "Label 8"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Spacer5" type="Control" parent="."]
+layout_mode = 2
+size_flags_vertical = 3

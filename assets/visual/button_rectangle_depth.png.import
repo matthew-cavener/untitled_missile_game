@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ch72wgljvuequ"
-path="res://.godot/imported/Triangle.png-c27590bab472bff91542b337ec2f5272.ctex"
+uid="uid://crkq1bqmnpsyr"
+path="res://.godot/imported/button_rectangle_depth.png-2bce20e3575967a1cbd99b81c132e75a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/visual/Triangle.png"
-dest_files=["res://.godot/imported/Triangle.png-c27590bab472bff91542b337ec2f5272.ctex"]
+source_file="res://assets/visual/button_rectangle_depth.png"
+dest_files=["res://.godot/imported/button_rectangle_depth.png-2bce20e3575967a1cbd99b81c132e75a.ctex"]
 
 [params]
 
