@@ -4,6 +4,12 @@ extends RigidBody2D
 
 var set_initial_state = true
 
+var radar_sweep_speed = 3
+
+var ciws_available = true
+var ciws_cooldown_timer: float
+var ciws_active: bool
+
 var missile_scene = preload("res://missile/missile.tscn")
 var decoy_scene = preload("res://decoy/decoy.tscn")
 var radar_contact_texture= preload("res://assets/visual/radar_contact.tscn").instantiate().texture
@@ -22,6 +28,8 @@ func set_parameters(parameters: Dictionary = {}) -> void:
     tube_4_contents = parameters.get("tube_4_contents", {})
     tube_5_contents = parameters.get("tube_5_contents", {})
     tube_6_contents = parameters.get("tube_6_contents", {})
+    ciws_available = parameters.get("ciws_available", true)
+    ciws_cooldown_timer = parameters.get("ciws_cooldown_timer", 3.0)
 
 func _draw():
     var center: Vector2 = Vector2.ZERO
@@ -67,6 +75,21 @@ func _on_missile_launched(launch_source: Node, boost_time: float) -> void:
     $MissileLaunchAlert.play(13.78)
     draw_passive_sensor_line(launch_source, boost_time)
 
+func _on_ciws_timer_timeout() -> void:
+    ciws_active = false
+    Events.emit_signal("ciws_stopped_firing")
+
+func _on_radar_sweep_area_area_exited(area: Area2D) -> void:
+    var radar_contact = Sprite2D.new()
+    radar_contact.texture = radar_contact_texture
+    radar_contact.scale = Vector2(0.031, 0.031)
+    var area_parent = area.get_parent()
+    radar_contact.global_position = area_parent.global_position - global_position
+    add_child(radar_contact)
+    var tween = create_tween()
+    tween.tween_property(radar_contact, "modulate:a", 0, 6)
+    tween.tween_callback(radar_contact.queue_free)
+
 func draw_passive_sensor_line(source: Node, decay_time: float = 3) -> void:
     var direction = (source.global_position - global_position).normalized()
     var line = Line2D.new()
@@ -99,14 +122,25 @@ func launch_tube_contents(tube_contents):
         print("tube is empty")
 
 func on_hit() -> void:
-    Events.emit_signal("player_ship_hit")
-    queue_free()
+    if ciws_available and not ciws_active:
+        ciws_active = true
+        Events.emit_signal("ciws_started_firing")
+        Events.emit_signal("resources_expended", 3000)
+        $CIWSSound.play()
+        var timer = Timer.new()
+        timer.set_wait_time(ciws_cooldown_timer)
+        timer.timeout.connect(_on_ciws_timer_timeout)
+        add_child(timer)
+        timer.start()
+    else:
+        Events.emit_signal("player_ship_hit")
+        queue_free()
 
 func _ready():
     var tween = create_tween()
     $RadarSweepLine.rotation_degrees = 0
     $RadarSweepLine/RadarSweepArea/RadarSweepCollision.rotation_degrees = 0
-    tween.tween_property($RadarSweepLine, "rotation_degrees", 360, 3).from_current()
+    tween.tween_property($RadarSweepLine, "rotation_degrees", 360, radar_sweep_speed).from_current()
     tween.set_loops()
 
     Events.connect("ping", _on_ping)
@@ -125,26 +159,3 @@ func _ready():
 
 func _integrate_forces(state) -> void:
     pass
-
-#func _on_radar_sweep_area_area_entered(area: Area2D) -> void:
-    #var radar_contact = Sprite2D.new()
-    #radar_contact.texture = radar_contact_texture
-    #radar_contact.scale = Vector2(0.031, 0.031)
-    #var area_parent = area.get_parent()
-    #radar_contact.global_position = area_parent.global_position - global_position
-    #add_child(radar_contact)
-    #var tween = create_tween()
-    #tween.tween_property(radar_contact, "modulate:a", 0, 6)
-    #tween.tween_callback(radar_contact.queue_free)
-
-
-func _on_radar_sweep_area_area_exited(area: Area2D) -> void:
-    var radar_contact = Sprite2D.new()
-    radar_contact.texture = radar_contact_texture
-    radar_contact.scale = Vector2(0.031, 0.031)
-    var area_parent = area.get_parent()
-    radar_contact.global_position = area_parent.global_position - global_position
-    add_child(radar_contact)
-    var tween = create_tween()
-    tween.tween_property(radar_contact, "modulate:a", 0, 6)
-    tween.tween_callback(radar_contact.queue_free)

@@ -5,6 +5,7 @@ var player_ship_scene = preload("res://player/ship/player_ship.tscn")
 @onready var world: Node2D = get_tree().get_first_node_in_group("world")
 
 var resources_expended = 0
+var ciws_available = false
 var salary = 2320
 var max_bonus = 13333 - salary
 var incident_started = false
@@ -155,10 +156,12 @@ func _on_incident_2_begin():
     enemy_ship_1.set_parameters(enemy_ship_1_parameters)
     enemy_ship_2.set_parameters(enemy_ship_2_parameters)
     enemy_ship_3.set_parameters(enemy_ship_3_parameters)
+    Events.emit_signal("ciws_available", ciws_available)
 
 func _on_incident_2_resolved():
     incident_resolved = true
     Events.emit_signal("incident_resolved")
+    Events.emit_signal("ciws_available", false)
     incident_timer.queue_free()
     for child in get_children():
         if child.has_method("set_parameters"):

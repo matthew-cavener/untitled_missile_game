@@ -21,7 +21,7 @@ var countermeasures: Array
 @onready var player = get_tree().get_first_node_in_group("player")
 @onready var approx_time_to_collision: float = 300.0
 
-var seeker_has_ping: bool = false
+var seeker_has_ping: bool
 var ping_time: float
 var short_ping_time: float
 var boost_thrust_magnitude: float

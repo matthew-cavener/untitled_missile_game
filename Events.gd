@@ -27,6 +27,9 @@ signal incident_6_begin
 
 signal incident_6_resolved
 
+signal ciws_available(ciws_available: bool)
+signal ciws_started_firing
+signal ciws_stopped_firing
 signal player_ship_hit
 
 signal ping(ping_source: Node)
