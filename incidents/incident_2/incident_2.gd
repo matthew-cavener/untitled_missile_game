@@ -117,13 +117,13 @@ func get_details():
     var details = {
         "name": "Incident 2",
         "description": "
-            Date: 1993-04-13
-            Location: Io - Callisto transfer orbit
-            Incident Report: Three RADAR contacts,
-            Three Active RADAR homing missiles
-            were deployed by contacts,
-            No casualties.
-            Resources expended: " + str(resources_expended),
+Date: 1993-04-13
+Location: Io - Callisto transfer orbit
+Incident Report: Three RADAR contacts,
+Three Active RADAR homing missiles
+were deployed by contacts,
+No casualties.
+Resources expended: " + str(resources_expended),
         "resources_expended": resources_expended,
         "incident_report_submitted": incident_resolved,
     }
