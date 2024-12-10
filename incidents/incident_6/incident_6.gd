@@ -238,13 +238,13 @@ func get_details():
     var details = {
         "name": "Incident 6",
         "description": "
-            Date: 1993-12-24
-            Location: Europa - Amalthea transfer orbit
-            Incident Report: Two RADAR contacts
-            Three Active RADAR homing missiles deployed by contacts,
-            Two Passive IR homing missiles deployed by contacts,
-            No casualties.
-            Resource expended: " + str(resources_expended),
+Date: 1993-12-24
+Location: Europa - Amalthea transfer orbit
+Incident Report: Two RADAR contacts
+Three Active RADAR homing missiles deployed by contacts,
+Two Passive IR homing missiles deployed by contacts,
+No casualties.
+Resource expended: " + str(resources_expended),
         "resources_expended": resources_expended,
         "incident_report_submitted": incident_resolved,
     }
