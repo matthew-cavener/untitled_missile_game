@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://bb6g7w1ru1jr4"]
+[gd_scene load_steps=7 format=3 uid="uid://bb6g7w1ru1jr4"]
 
 [ext_resource type="Script" path="res://player/ship/player_ship.gd" id="1_hdatc"]
 [ext_resource type="PackedScene" uid="uid://lph3b30dgdlx" path="res://assets/visual/radar_contact.tscn" id="2_x6xbl"]
 [ext_resource type="AudioStream" uid="uid://bnv1btiflaydi" path="res://assets/audio/sonar-punchy.mp3" id="3_dyk86"]
 [ext_resource type="AudioStream" uid="uid://ctwrwh17ygl3s" path="res://assets/audio/new-launch-alert.wav" id="4_el3sy"]
-[ext_resource type="AudioStream" uid="uid://bm6l502r3p8m3" path="res://assets/audio/new-launch-sound.mp3" id="5_di54m"]
+[ext_resource type="AudioStream" uid="uid://cr2yrnvdy5vjy" path="res://assets/audio/new-launch-sound-altered.ogg" id="5_q2rta"]
+[ext_resource type="AudioStream" uid="uid://dra7r2nw2a7jh" path="res://assets/audio/ciws.ogg" id="6_q4ntv"]
 
 [node name="PlayerShip" type="RigidBody2D"]
 script = ExtResource("1_hdatc")
@@ -20,7 +21,12 @@ stream = ExtResource("3_dyk86")
 stream = ExtResource("4_el3sy")
 
 [node name="LaunchSound" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("5_di54m")
+stream = ExtResource("5_q2rta")
+volume_db = 10.0
+
+[node name="CIWSSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("6_q4ntv")
+volume_db = 10.0
 
 [node name="RadarSweepLine" type="Line2D" parent="."]
 scale = Vector2(1, 0.999766)

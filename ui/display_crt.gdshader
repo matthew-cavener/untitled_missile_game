@@ -28,7 +28,7 @@ void fragment() {
         vec2 sample_uv = (warped_uv + vec2(offset, 0.0) + 1.0) / 2.0;
         float weight = pow(blur_decay, float(i));
         vec3 sample_color = textureLod(screen_texture, sample_uv, 0.0).rgb * weight;
-        
+
         screen_color = mix(screen_color, sample_color, weight / (total_weight + weight));
         total_weight += weight;
     }
