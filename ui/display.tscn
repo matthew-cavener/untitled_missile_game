@@ -54,7 +54,9 @@ version 0.6.23rc.4
 
 Copyright (c) Jovian Express Corporation, 1982
 All Rights Reserved
-JovEx is a registered trademark of  Jovian Express Corp."
+JovEx is a registered trademark of  Jovian Express Corp.
+
+Select an Incident to review"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3

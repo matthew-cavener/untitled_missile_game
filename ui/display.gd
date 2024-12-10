@@ -282,31 +282,17 @@ func _on_incident_resolved() -> void:
     label_6.text = ""
     label_7.text = ""
     label_8.text = "Quit"
-    central_text.text = "
-    Incident resolved.
-    Thank you for safeguarding
-    JoveEx® property!
+    central_text.text = "Incident resolved.
+Thank you for safeguarding JoveEx property!
 
-    Company Assets expended will be
-    evaluated during manifest reconciliation
-    and reflected in your
-    performance bonus.
+Company Assets expended will be evaluated during manifest reconciliation and reflected in your performance bonus.
 
-    POSTED LEGAL NOTICE:
-    In accordance with the decision of the court
-    in the case of
-    Jovian Parcel Service®
-    v.
-    Jovian Transport Workers Union
-    no employer may deduct
-    from the wages of an employee,
-    or require an employee to pay back,
-    any resource expended by the employee
-    in the course of the employee's duties.
-    If you believe your employer has
-    violated this law, please contact
-    the Jovian Labor Relations Board.
-    "
+POSTED LEGAL NOTICE: In accordance with the decision of the court in the case of
+Jovian Parcel Service
+v.
+Jovian Transport Workers Union
+no employer may deduct from the wages of an employee, or require an employee to pay back, any resource expended by the employee in the course of the employee's duties. If you believe your employer has violated this law, please contact the Jovian Labor Relations Board.
+"
 
 func _on_incident_6_resolved() -> void:
     display_state = DisplayState.CONTRACT_COMPLETE

@@ -51,89 +51,125 @@ func get_final_display_text() -> String:
     # first incident not completed
     if compensation < 2320:
         final_display_text = "
-            You are " + player_status + ".
-            Your family cannot afford air.
-            Your family cannot afford water.
-            Your family cannot afford food.
-            Your family cannot afford rent.
-            Your family cannot afford medical care.
-            Your family cannot afford an education.
+You are " + player_status + ".
+Your family cannot afford
+air.
+Your family cannot afford
+water.
+Your family cannot afford
+food.
+Your family cannot afford
+rent.
+Your family cannot afford
+medical care.
+Your family cannot afford
+an education.
 
-            To get a good job.
+To get a good job.
 
-            Like yours.
+Like yours.
             "
         return final_display_text
     # second incident not completed
     elif compensation < 4640:
         final_display_text = "
-            You are " + player_status + ".
-            Your family can afford air.
-            Your family cannot afford water.
-            Your family cannot afford food.
-            Your family cannot afford rent.
-            Your family cannot afford medical care.
-            Your family cannot afford an education.
+You are " + player_status + ".
+Your family can afford
+air.
+Your family cannot afford
+water.
+Your family cannot afford
+food.
+Your family cannot afford
+rent.
+Your family cannot afford
+medical care.
+Your family cannot afford
+an education.
 
-            To get a good job.
+To get a good job.
 
-            Like yours.
+Like yours.
             "
     elif compensation < 12000:
         final_display_text = "
-            You are " + player_status + ".
-            Your family can afford air.
-            Your family can afford water.
-            Your family cannot afford food.
-            Your family cannot afford rent.
-            Your family cannot afford medical care.
-            Your family cannot afford an education.
+You are " + player_status + ".
+Your family can afford
+air.
+Your family can afford
+water.
+Your family cannot afford
+food.
+Your family cannot afford
+rent.
+Your family cannot afford
+medical care.
+Your family cannot afford
+an education.
 
-            To get a good job.
+To get a good job.
 
-            Like yours.
+Like yours.
             "
     elif compensation < 25000:
         final_display_text = "
-            You are " + player_status + ".
-            Your family can afford air.
-            Your family can afford water.
-            Your family can afford food.
-            Your family cannot afford rent.
-            Your family cannot afford medical care.
-            Your family cannot afford an education.
+You are " + player_status + ".
+Your family can afford
+air.
+Your family can afford
+water.
+Your family can afford
+food.
+Your family cannot afford
+rent.
+Your family cannot afford
+medical care.
+Your family cannot afford
+an education.
 
-            To get a good job.
+To get a good job.
 
-            Like yours.
+Like yours.
             "
     elif compensation < 50000:
         final_display_text = "
-            You are " + player_status + ".
-            Your family can afford air.
-            Your family can afford water.
-            Your family can afford food.
-            Your family can afford rent.
-            Your family can afford medical care.
-            Your family cannot afford an education.
+You are " + player_status + ".
+Your family can afford
+air.
+Your family can afford
+water.
+Your family can afford
+food.
+Your family can afford
+rent.
+Your family can afford
+medical care.
+Your family cannot afford
+an education.
 
-            To get a good job.
+To get a good job.
 
-            Like yours.
+Like yours.
             "
     else:
         final_display_text = "
-            You are " + player_status + ".
-            Your family can afford air.
-            Your family can afford water.
-            Your family can afford food.
-            Your family can afford rent.
-            Your family can afford medical care.
-            Your family can afford an education.
+You are " + player_status + ".
+Your family can afford
+air.
+Your family can afford
+water.
+Your family can afford
+food.
+Your family can afford
+rent.
+Your family can afford
+medical care.
+Your family can afford
+an education.
 
-            To get a good job.
+To get a good job.
 
-            Like yours.
+Like yours.
             "
 
     return final_display_text
