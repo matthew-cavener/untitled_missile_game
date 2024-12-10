@@ -71,13 +71,13 @@ func get_details():
     var details = {
         "name": "Incident 3",
         "description": "
-            Date: 1993-06-29
-            Location: Ganymede - Europa transfer orbit
-            Incident Report: Single RADAR contact
-            One Active RADAR homing missile deployed by contact,
-            One Passive IR homing missile deployed by contact,
-            No casualties.
-            Resource expended: " + str(resources_expended),
+Date: 1993-06-29
+Location: Ganymede - Europa transfer orbit
+Incident Report: Single RADAR contact
+One Active RADAR homing missile deployed by contact,
+One Passive IR homing missile deployed by contact,
+No casualties.
+Resource expended: " + str(resources_expended),
         "resources_expended": resources_expended,
         "incident_report_submitted": incident_resolved,
     }

@@ -128,13 +128,13 @@ func get_details():
     var details = {
         "name": "Incident 4",
         "description": "
-            Date: 1993-08-03
-            Location: Low Jupiter Orbit LJO-0 station
-            Incident Report: Two RADAR contacts
-            Three Active RADAR homing missiles deployed by contacts,
-            One Passive IR homing missiles deployed by contacts,
-            No casualties.
-            Resource expended: " + str(resources_expended),
+Date: 1993-08-03
+Location: Low Jupiter Orbit LJO-0 station
+Incident Report: Two RADAR contacts
+Three Active RADAR homing missiles deployed by contacts,
+One Passive IR homing missiles deployed by contacts,
+No casualties.
+Resource expended: " + str(resources_expended),
         "resources_expended": resources_expended,
         "incident_report_submitted": incident_resolved,
     }
