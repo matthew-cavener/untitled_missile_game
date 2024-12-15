@@ -6,8 +6,14 @@ extends Control
 @export var new_value: String = "123456"
 
 @onready var lit_segments = $LitSegments
+@onready var world: Node2D = get_tree().get_first_node_in_group("world")
+
 var is_updating: bool = false
 var current_timers = []
+
+func _ready() -> void:
+    lit_segments.text = str(world.get_bonus_eligibility())
+    Events.connect("resources_expended", _on_resources_expended)
 
 func _flash(flashes: int, total_flash_time: float, new_value: String, flash_count: int, reveal_time: float) -> void:
     var flash_delay = total_flash_time / (flashes * 2)
@@ -65,3 +71,6 @@ func _cleanup_timers() -> void:
     for timer in current_timers:
         timer.queue_free()
     current_timers.clear()
+
+func _on_resources_expended(amount: int) -> void:
+    update_display(flashes, total_flash_time, str(world.get_bonus_eligibility()), reveal_time)

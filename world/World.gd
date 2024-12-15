@@ -10,14 +10,22 @@ var incidents = {
 }
 
 var player_status = "Alive"
+var bonus_eligibility = 66078
 
 func _ready():
     Events.connect("player_ship_hit", _on_player_ship_hit)
+    Events.connect("resources_expended", _on_resources_expended)
     for incident in incidents:
         add_child(incidents[incident])
 
 func _on_player_ship_hit():
     player_status = "Dead"
+
+func _on_resources_expended(amount: int):
+    bonus_eligibility -= amount
+
+func get_bonus_eligibility() -> int:
+    return bonus_eligibility
 
 func get_salary_paid() -> int:
     var total_salary_paid = 0
@@ -26,22 +34,22 @@ func get_salary_paid() -> int:
             total_salary_paid += incidents[incident]["salary"]
     return total_salary_paid
 
-func get_max_bonus() -> int:
-    var total_max_bonus = 0
-    for incident in incidents:
-        if incidents[incident]["incident_resolved"]:
-            total_max_bonus += incidents[incident]["max_bonus"]
-    return total_max_bonus
+# func get_max_bonus() -> int:
+#     var total_max_bonus = 0
+#     for incident in incidents:
+#         if incidents[incident]["incident_resolved"]:
+#             total_max_bonus += incidents[incident]["max_bonus"]
+#     return total_max_bonus
 
-func get_resources_expended() -> int:
-    var total_resources_expended = 0
-    for incident in incidents:
-        if incidents[incident]["incident_resolved"]:
-            total_resources_expended += incidents[incident]["resources_expended"]
-    return total_resources_expended
+# func get_resources_expended() -> int:
+#     var total_resources_expended = 0
+#     for incident in incidents:
+#         if incidents[incident]["incident_resolved"]:
+#             total_resources_expended += incidents[incident]["resources_expended"]
+#     return total_resources_expended
 
 func get_total_compensation() -> int:
-    return get_salary_paid() + get_max_bonus() - get_resources_expended()
+    return get_salary_paid() + get_bonus_eligibility()
 
 func get_final_display_text() -> String:
     $Ambiance.stop()
