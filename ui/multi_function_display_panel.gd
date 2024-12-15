@@ -11,12 +11,12 @@ func _ready() -> void:
 
 func _on_ciws_available(ciws_available: bool) -> void:
     if ciws_available:
-        $CIWSIndicator.texture = ciws_ready_texture
+        $CIWSIndicatorBorder/CIWSIndicator.texture = ciws_ready_texture
     else:
-        $CIWSIndicator.texture = ciws_unavailable_texture
+        $CIWSIndicatorBorder/CIWSIndicator.texture = ciws_unavailable_texture
 
 func _on_ciws_started_firing() -> void:
-    $CIWSIndicator.texture = ciws_firing_texture
+    $CIWSIndicatorBorder/CIWSIndicator.texture = ciws_firing_texture
 
 func _on_ciws_stopped_firing() -> void:
-    $CIWSIndicator.texture = ciws_ready_texture
+    $CIWSIndicatorBorder/CIWSIndicator.texture = ciws_ready_texture
