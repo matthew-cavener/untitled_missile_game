@@ -12,7 +12,7 @@ var is_updating: bool = false
 var current_timers = []
 
 func _ready() -> void:
-    lit_segments.text = str(world.get_bonus_eligibility())
+    lit_segments.text = "%06d" % int(world.get_bonus_eligibility())
     Events.connect("resources_expended", _on_resources_expended)
 
 func _flash(flashes: int, total_flash_time: float, new_value: String, flash_count: int, reveal_time: float) -> void:
@@ -35,6 +35,7 @@ func _on_flash_timeout(flashes: int, total_flash_time: float, new_value: String,
     _flash(flashes, total_flash_time, new_value, flash_count, reveal_time)
 
 func _reveal(new_value: String, reveal_time: float) -> void:
+    new_value = "%06d" % int(new_value)
     lit_segments.text = new_value
     lit_segments.visible_characters = 0
     var reveal_index = 0
