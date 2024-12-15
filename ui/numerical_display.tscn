@@ -50,12 +50,3 @@ theme_override_font_sizes/font_size = 48
 text = "123456"
 vertical_alignment = 1
 metadata/_edit_lock_ = true
-
-[node name="Button" type="Button" parent="."]
-layout_mode = 0
-offset_left = 200.0
-offset_right = 256.0
-offset_bottom = 48.0
-text = "UPDATE!"
-
-[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
