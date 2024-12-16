@@ -1,7 +1,7 @@
 [gd_scene load_steps=16 format=3 uid="uid://cgc86k1dh6but"]
 
-[ext_resource type="Texture2D" uid="uid://crkq1bqmnpsyr" path="res://assets/visual/button_rectangle_depth.png" id="1_naua7"]
-[ext_resource type="Texture2D" uid="uid://ck86qbma2slcy" path="res://assets/visual/panel_rectangle_screws.png" id="2_sk6xn"]
+[ext_resource type="Texture2D" uid="uid://cobpb0ny5yito" path="res://assets/visual/button_square_depth.png" id="1_0cmy0"]
+[ext_resource type="Texture2D" uid="uid://dxsffax3pkry2" path="res://assets/visual/panel_square_screws.png" id="2_5w5i7"]
 [ext_resource type="AudioStream" uid="uid://csh8mskma1khu" path="res://assets/audio/switch1.ogg" id="3_7gcal"]
 [ext_resource type="Script" path="res://ui/panel_button.gd" id="3_n511q"]
 [ext_resource type="AudioStream" uid="uid://bbpdgkaxm1rhs" path="res://assets/audio/switch2.ogg" id="4_f4pmx"]
@@ -33,8 +33,8 @@ stream_4/stream = ExtResource("12_1dowx")
 [node name="PanelButton" type="TextureButton"]
 offset_right = 40.0
 offset_bottom = 40.0
-texture_normal = ExtResource("1_naua7")
-texture_pressed = ExtResource("2_sk6xn")
+texture_normal = ExtResource("1_0cmy0")
+texture_pressed = ExtResource("2_5w5i7")
 script = ExtResource("3_n511q")
 
 [node name="ButtonDown" type="AudioStreamPlayer2D" parent="."]
