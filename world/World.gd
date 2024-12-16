@@ -34,20 +34,6 @@ func get_salary_paid() -> int:
             total_salary_paid += incidents[incident]["salary"]
     return total_salary_paid
 
-# func get_max_bonus() -> int:
-#     var total_max_bonus = 0
-#     for incident in incidents:
-#         if incidents[incident]["incident_resolved"]:
-#             total_max_bonus += incidents[incident]["max_bonus"]
-#     return total_max_bonus
-
-# func get_resources_expended() -> int:
-#     var total_resources_expended = 0
-#     for incident in incidents:
-#         if incidents[incident]["incident_resolved"]:
-#             total_resources_expended += incidents[incident]["resources_expended"]
-#     return total_resources_expended
-
 func get_total_compensation() -> int:
     return get_salary_paid() + get_bonus_eligibility()
 
