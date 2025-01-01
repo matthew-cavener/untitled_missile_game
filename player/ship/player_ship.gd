@@ -136,6 +136,27 @@ func on_hit() -> void:
         Events.emit_signal("player_ship_hit")
         queue_free()
 
+func check_enemy_missile_states():
+    var warning_states = ["BOOSTING", "MIDCOURSE", "SEEKING", "TERMINAL"]
+    var all_stowed = true
+    var all_disarmed = true
+    var enemy_missiles = get_tree().get_nodes_in_group("enemy_missiles")
+    if enemy_missiles.size() == 0:
+        Events.emit_signal("all_clear")
+        return
+    for missile in enemy_missiles:
+        if missile.state_name in warning_states:
+            Events.emit_signal("warning")
+            return
+        elif missile.state_name != "STOWED":
+            all_stowed = false
+        if missile.state_name != "DISARMED":
+            all_disarmed = false
+    if all_stowed:
+       Events.emit_signal("caution")
+    elif all_disarmed:
+        Events.emit_signal("all_clear")
+
 func _ready():
     var tween = create_tween()
     $RadarSweepLine.rotation_degrees = 0
@@ -159,3 +180,6 @@ func _ready():
 
 func _integrate_forces(state) -> void:
     pass
+
+func _process(delta: float) -> void:
+    check_enemy_missile_states()

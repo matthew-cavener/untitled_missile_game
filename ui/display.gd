@@ -1,6 +1,6 @@
 extends Control
 
-enum DisplayState {BOOT, RADAR, ORDNANCE, INCIDENTS, DEAD, CONTRACT_COMPLETE}
+enum DisplayState {BOOT, RADAR, ORDNANCE, ADMINISTRATION, INCIDENTS, DEAD, CONTRACT_COMPLETE}
 
 var display_state: DisplayState = DisplayState.BOOT
 var selected_incident: String = "NONE"
@@ -61,11 +61,20 @@ func _on_button_1_pressed() -> void:
             label_7.text = world.incidents["incident5"].get_details()["name"] if world.incidents["incident4"].get_details()["incident_report_submitted"] else ""
             label_8.text = world.incidents["incident6"].get_details()["name"] if world.incidents["incident5"].get_details()["incident_report_submitted"] else ""
         DisplayState.RADAR:
-            pass
+            display_state = DisplayState.ADMINISTRATION
+            world.visible = false
+            label_1.text = "Ordnance"
+            label_2.text = ""
+            label_3.text = ""
+            label_4.text = "Clock-Out"
+            label_5.text = "Radar"
+            label_6.text = ""
+            label_7.text = ""
+            label_8.text = ""
         DisplayState.ORDNANCE:
             display_state = DisplayState.RADAR
             world.visible = true
-            label_1.text = ""
+            label_1.text = "Administration"
             label_2.text = ""
             label_3.text = ""
             label_4.text = ""
@@ -130,6 +139,10 @@ func _on_button_4_pressed() -> void:
         DisplayState.ORDNANCE:
             Events.emit_signal("launch_tube_3")
             label_4.text = "empty"
+        DisplayState.ADMINISTRATION:
+            # try to clock out, only if all_clear signal has been received
+            pass
+            
         DisplayState.INCIDENTS:
             if world.incidents["incident3"].get_details()["incident_report_submitted"]:
                 central_text.text = world.incidents["incident3"].get_details()["description"]

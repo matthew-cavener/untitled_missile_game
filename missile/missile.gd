@@ -91,9 +91,9 @@ func get_target() -> Node:
             if missile.target.is_in_group("player"):
                 return missile
     for countermeasure in countermeasures:
-        var target = get_tree().get_first_node_in_group(countermeasure)
-        if target:
-            return target
+        var selected_target = get_tree().get_first_node_in_group(countermeasure)
+        if selected_target:
+            return selected_target
     return get_tree().get_first_node_in_group(intended_target)
 
 func proportional_navigation(proportionality_constant: int = 3) -> Vector2:

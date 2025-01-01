@@ -27,6 +27,10 @@ signal incident_6_begin
 
 signal incident_6_resolved
 
+signal all_clear
+signal caution
+signal warning
+
 signal ciws_available(ciws_available: bool)
 signal ciws_started_firing
 signal ciws_stopped_firing

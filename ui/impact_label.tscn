@@ -1,0 +1,27 @@
+[gd_scene load_steps=2 format=3 uid="uid://bp6l8s87xuna6"]
+
+[ext_resource type="FontFile" uid="uid://cblx6sd5gyfog" path="res://assets/visual/Impact Label Reversed.ttf" id="1_44r8i"]
+
+[node name="ImpactLabelText" type="Label"]
+anchors_preset = -1
+anchor_right = 0.132
+anchor_bottom = 0.037
+offset_right = -0.0639954
+offset_bottom = 0.0240002
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("1_44r8i")
+theme_override_font_sizes/font_size = 21
+text = "Impact Label"
+
+[node name="ImpactLabelStrip" type="ColorRect" parent="."]
+show_behind_parent = true
+custom_minimum_size = Vector2(6, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.114897, 0.114897, 0.114897, 1)
