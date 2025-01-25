@@ -1,0 +1,52 @@
+[gd_scene load_steps=3 format=3 uid="uid://d3s5tc3pqt887"]
+
+[ext_resource type="FontFile" uid="uid://cob1xxrwso2hs" path="res://assets/visual/fs-sevegment.ttf" id="1_eyi5f"]
+[ext_resource type="Script" path="res://ui/numerical_display.gd" id="1_gxve3"]
+
+[node name="NumericalDisplay" type="Control"]
+layout_mode = 3
+anchor_right = 0.167
+anchor_bottom = 0.074
+offset_right = -0.384018
+offset_bottom = 0.0480003
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_gxve3")
+
+[node name="PlasticTint" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0980392, 0.0588235, 0.0392157, 1)
+metadata/_edit_lock_ = true
+
+[node name="UnlitSegmentBleed" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.705882, 0.0588235, 0.0588235, 0.184314)
+theme_override_fonts/font = ExtResource("1_eyi5f")
+theme_override_font_sizes/font_size = 48
+text = "888888"
+vertical_alignment = 1
+metadata/_edit_lock_ = true
+
+[node name="LitSegments" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.705882, 0.0588235, 0.0588235, 1)
+theme_override_fonts/font = ExtResource("1_eyi5f")
+theme_override_font_sizes/font_size = 48
+text = "123456"
+vertical_alignment = 1
+metadata/_edit_lock_ = true
