@@ -142,20 +142,22 @@ func check_enemy_missile_states():
     var all_disarmed = true
     var enemy_missiles = get_tree().get_nodes_in_group("enemy_missiles")
     if enemy_missiles.size() == 0:
-        Events.emit_signal("all_clear")
+        Events.emit_signal("all_clear", true)
         return
     for missile in enemy_missiles:
         if missile.state_name in warning_states:
             Events.emit_signal("warning")
+            Events.emit_signal("all_clear", false)
             return
         elif missile.state_name != "STOWED":
             all_stowed = false
         if missile.state_name != "DISARMED":
             all_disarmed = false
     if all_stowed:
-       Events.emit_signal("caution")
+        Events.emit_signal("caution")
+        Events.emit_signal("all_clear", false)
     elif all_disarmed:
-        Events.emit_signal("all_clear")
+        Events.emit_signal("all_clear", true)
 
 func _ready():
     var tween = create_tween()

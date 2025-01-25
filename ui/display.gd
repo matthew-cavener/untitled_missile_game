@@ -4,6 +4,7 @@ enum DisplayState {BOOT, RADAR, ORDNANCE, ADMINISTRATION, INCIDENTS, DEAD, CONTR
 
 var display_state: DisplayState = DisplayState.BOOT
 var selected_incident: String = "NONE"
+var all_clear_recieved: bool = false
 
 @onready var label_1: Label = $VBoxContainer/LeftTextPanel/Label1
 @onready var label_2: Label = $VBoxContainer/LeftTextPanel/Label2
@@ -44,6 +45,7 @@ func _ready() -> void:
     Events.connect("incident_resolved", _on_incident_resolved)
     Events.connect("incident_6_resolved", _on_incident_6_resolved)
     Events.connect("player_ship_hit", _on_player_ship_hit)
+    Events.connect("all_clear", _on_all_clear)
 
 
 func _on_button_1_pressed() -> void:
@@ -63,6 +65,7 @@ func _on_button_1_pressed() -> void:
         DisplayState.RADAR:
             display_state = DisplayState.ADMINISTRATION
             world.visible = false
+            central_text.text = ""
             label_1.text = "Ordnance"
             label_2.text = ""
             label_3.text = ""
@@ -74,6 +77,7 @@ func _on_button_1_pressed() -> void:
         DisplayState.ORDNANCE:
             display_state = DisplayState.RADAR
             world.visible = true
+            central_text.text = ""
             label_1.text = "Administration"
             label_2.text = ""
             label_3.text = ""
@@ -82,6 +86,19 @@ func _on_button_1_pressed() -> void:
             label_6.text = ""
             label_7.text = ""
             label_8.text = ""
+        DisplayState.ADMINISTRATION:
+            display_state = DisplayState.ORDNANCE
+            world.visible = false
+            central_text.text = ""
+            label_1.text = "Radar"
+            var player = get_tree().get_first_node_in_group("player")
+            label_2.text = player.get("tube_1_contents").get("display_name", "empty")
+            label_3.text = player.get("tube_2_contents").get("display_name", "empty")
+            label_4.text = player.get("tube_3_contents").get("display_name", "empty")
+            label_5.text = "Administration"
+            label_6.text = player.get("tube_4_contents").get("display_name", "empty")
+            label_7.text = player.get("tube_5_contents").get("display_name", "empty")
+            label_8.text = player.get("tube_6_contents").get("display_name", "empty")
 
 
 func _on_button_2_pressed() -> void:
@@ -125,7 +142,7 @@ func _on_button_4_pressed() -> void:
                 Events.emit_signal("incident_" + selected_incident + "_begin")
                 display_state = DisplayState.RADAR
                 world.visible = true
-                label_1.text = ""
+                label_1.text = "Administration"
                 label_2.text = ""
                 label_3.text = ""
                 label_4.text = ""
@@ -140,8 +157,10 @@ func _on_button_4_pressed() -> void:
             Events.emit_signal("launch_tube_3")
             label_4.text = "empty"
         DisplayState.ADMINISTRATION:
-            # try to clock out, only if all_clear signal has been received
-            pass
+            if all_clear_recieved:
+                Events.emit_signal("incident_" + selected_incident + "_resolved")
+            else:
+                central_text.text = "Please remain at your station until your supervisor has issued the all-clear."
             
         DisplayState.INCIDENTS:
             if world.incidents["incident3"].get_details()["incident_report_submitted"]:
@@ -177,17 +196,40 @@ func _on_button_5_pressed() -> void:
         DisplayState.RADAR:
             display_state = DisplayState.ORDNANCE
             world.visible = false
+            central_text.text = ""
             label_1.text = "Radar"
             var player = get_tree().get_first_node_in_group("player")
             label_2.text = player.get("tube_1_contents").get("display_name", "empty")
             label_3.text = player.get("tube_2_contents").get("display_name", "empty")
             label_4.text = player.get("tube_3_contents").get("display_name", "empty")
-            label_5.text = ""
+            label_5.text = "Administration"
             label_6.text = player.get("tube_4_contents").get("display_name", "empty")
             label_7.text = player.get("tube_5_contents").get("display_name", "empty")
             label_8.text = player.get("tube_6_contents").get("display_name", "empty")
         DisplayState.ORDNANCE:
-            pass
+            display_state = DisplayState.ADMINISTRATION
+            world.visible = false
+            central_text.text = ""
+            label_1.text = "Ordnance"
+            label_2.text = ""
+            label_3.text = ""
+            label_4.text = "Clock-Out"
+            label_5.text = "Radar"
+            label_6.text = ""
+            label_7.text = ""
+            label_8.text = ""
+        DisplayState.ADMINISTRATION:
+            display_state = DisplayState.RADAR
+            world.visible = true
+            central_text.text = ""
+            label_1.text = "Administration"
+            label_2.text = ""
+            label_3.text = ""
+            label_4.text = ""
+            label_5.text = "Ordnance"
+            label_6.text = ""
+            label_7.text = ""
+            label_8.text = ""
         DisplayState.INCIDENTS:
             display_state = DisplayState.BOOT
             world.visible = false
@@ -268,6 +310,9 @@ func _on_button_8_pressed() -> void:
             label_6.text = "Already"
             label_7.text = "Unemployed"
             label_8.text = "Quit"
+
+func _on_all_clear(all_clear: bool) -> void:
+    all_clear_recieved = all_clear
 
 func _on_player_ship_hit() -> void:
     display_state = DisplayState.DEAD

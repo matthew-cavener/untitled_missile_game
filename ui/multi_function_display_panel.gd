@@ -13,7 +13,7 @@ func _ready() -> void:
     Events.connect("caution", _on_caution)
     Events.connect("warning", _on_warning)
     _on_ciws_available(false)
-    _on_all_clear()
+    _on_all_clear(true)
     warning_timer.set_wait_time(0.33)
     warning_timer.one_shot = false
     warning_timer.timeout.connect(_on_warning_timer_timeout)
@@ -31,10 +31,14 @@ func _on_ciws_started_firing() -> void:
 func _on_ciws_stopped_firing() -> void:
     CIWSIndicator.set_bulb_texture(CIWSIndicator.BulbState.GREEN)
 
-func _on_all_clear() -> void:
-    MasterWarningLight.set_bulb_texture(MasterWarningLight.BulbState.GREEN)
-    warning_timer.stop()
-    is_warning_active = false
+func _on_all_clear(all_clear: bool) -> void:
+    # MasterWarningLight.set_bulb_texture(MasterWarningLight.BulbState.GREEN)
+    # warning_timer.stop()
+    # is_warning_active = false
+    if all_clear:
+        MasterWarningLight.set_bulb_texture(MasterWarningLight.BulbState.GREEN)
+        warning_timer.stop()
+        is_warning_active = false
 
 func _on_caution() -> void:
     MasterWarningLight.set_bulb_texture(MasterWarningLight.BulbState.YELLOW)

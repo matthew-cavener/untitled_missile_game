@@ -25,9 +25,14 @@ signal incident_4_begin
 signal incident_5_begin
 signal incident_6_begin
 
+signal incident_1_resolved
+signal incident_2_resolved
+signal incident_3_resolved
+signal incident_4_resolved
+signal incident_5_resolved
 signal incident_6_resolved
 
-signal all_clear
+signal all_clear(all_clear: bool)
 signal caution
 signal warning
 
