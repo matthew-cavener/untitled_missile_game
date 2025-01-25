@@ -86,7 +86,6 @@ func _on_incident_1_resolved():
     incident_resolved = true
     Events.emit_signal("incident_resolved")
     Events.emit_signal("ciws_available", false)
-    # incident_timer.queue_free()
     for child in get_children():
         if child.has_method("set_parameters"):
             child.queue_free()

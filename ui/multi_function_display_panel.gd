@@ -32,9 +32,6 @@ func _on_ciws_stopped_firing() -> void:
     CIWSIndicator.set_bulb_texture(CIWSIndicator.BulbState.GREEN)
 
 func _on_all_clear(all_clear: bool) -> void:
-    # MasterWarningLight.set_bulb_texture(MasterWarningLight.BulbState.GREEN)
-    # warning_timer.stop()
-    # is_warning_active = false
     if all_clear:
         MasterWarningLight.set_bulb_texture(MasterWarningLight.BulbState.GREEN)
         warning_timer.stop()
