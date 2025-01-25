@@ -1,0 +1,40 @@
+[gd_scene load_steps=4 format=3 uid="uid://dev0wbbpsmteo"]
+
+[ext_resource type="Script" path="res://ui/indicator_light.gd" id="1_c5dli"]
+[ext_resource type="Texture2D" uid="uid://du5eo1ounyqw3" path="res://assets/visual/round_grey.png" id="1_xh501"]
+[ext_resource type="Texture2D" uid="uid://c5ik7nivrnavd" path="res://assets/visual/off_bar_round_gloss_large_square.png" id="3_j3ohn"]
+
+[node name="IndicatorLight" type="Control"]
+layout_mode = 3
+anchor_left = -0.0277778
+anchor_top = -0.0493827
+anchor_right = 0.0277778
+anchor_bottom = 0.0493827
+script = ExtResource("1_c5dli")
+metadata/_edit_use_anchors_ = true
+
+[node name="IndicatorBorder" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_xh501")
+expand_mode = 1
+stretch_mode = 5
+metadata/_edit_use_anchors_ = true
+metadata/_edit_lock_ = true
+
+[node name="IndicatorBulb" type="TextureRect" parent="IndicatorBorder"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.125
+anchor_top = 0.125
+anchor_right = 0.875
+anchor_bottom = 0.875
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_j3ohn")
+stretch_mode = 5
+metadata/_edit_use_anchors_ = true

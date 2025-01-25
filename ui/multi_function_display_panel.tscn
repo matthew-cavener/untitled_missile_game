@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://67f8uqxwgsxf"]
+[gd_scene load_steps=12 format=3 uid="uid://67f8uqxwgsxf"]
 
 [ext_resource type="PackedScene" uid="uid://b8sqw4ayd2bre" path="res://ui/left_button_panel.tscn" id="1_kwx1i"]
 [ext_resource type="Script" path="res://ui/multi_function_display_panel.gd" id="1_owumd"]
@@ -7,10 +7,9 @@
 [ext_resource type="PackedScene" uid="uid://ct82xuv03s3vg" path="res://ui/right_button_panel.tscn" id="3_aneim"]
 [ext_resource type="PackedScene" uid="uid://dg0e1sxtg5ffn" path="res://world/world.tscn" id="3_lyras"]
 [ext_resource type="Shader" path="res://ui/display_crt.gdshader" id="5_mp8xj"]
-[ext_resource type="Texture2D" uid="uid://dua1gcw3ac7an" path="res://assets/visual/red_bar_round_gloss_large_square.png" id="6_px255"]
-[ext_resource type="FontFile" uid="uid://cblx6sd5gyfog" path="res://assets/visual/Impact Label Reversed.ttf" id="7_vu1or"]
+[ext_resource type="PackedScene" uid="uid://dev0wbbpsmteo" path="res://ui/indicator_light.tscn" id="9_7djen"]
 [ext_resource type="Texture2D" uid="uid://bahric3gcqove" path="res://assets/visual/panel_border_grey.png" id="9_oyibe"]
-[ext_resource type="Texture2D" uid="uid://du5eo1ounyqw3" path="res://assets/visual/round_grey.png" id="11_qldy5"]
+[ext_resource type="PackedScene" uid="uid://bp6l8s87xuna6" path="res://ui/impact_label.tscn" id="10_a3im3"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_g8o1p"]
 shader = ExtResource("5_mp8xj")
@@ -74,60 +73,6 @@ position = Vector2(380, 320)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="CIWSLabel" type="ColorRect" parent="."]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.847222
-anchor_top = 0.179012
-anchor_right = 0.979227
-anchor_bottom = 0.224267
-offset_right = 0.930786
-offset_bottom = -5.32501
-rotation = 0.0349066
-color = Color(0.114897, 0.114897, 0.114897, 1)
-metadata/_edit_use_anchors_ = true
-
-[node name="CIWSLabelText" type="Label" parent="CIWSLabel"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_fonts/font = ExtResource("7_vu1or")
-theme_override_font_sizes/font_size = 21
-text = "CIWS Status"
-horizontal_alignment = 1
-vertical_alignment = 1
-metadata/_edit_lock_ = true
-metadata/_edit_use_anchors_ = true
-
-[node name="BonusLabel" type="ColorRect" parent="."]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.805556
-anchor_top = 0.123457
-anchor_right = 0.994792
-anchor_bottom = 0.160494
-offset_bottom = 1.52588e-05
-color = Color(0.114897, 0.114897, 0.114897, 1)
-metadata/_edit_use_anchors_ = true
-
-[node name="BonusLabelText" type="Label" parent="BonusLabel"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_fonts/font = ExtResource("7_vu1or")
-theme_override_font_sizes/font_size = 21
-text = "Bonus Eligibility"
-horizontal_alignment = 1
-vertical_alignment = 1
-metadata/_edit_lock_ = true
-metadata/_edit_use_anchors_ = true
-
 [node name="NinePatchRect" type="NinePatchRect" parent="."]
 layout_mode = 1
 anchors_preset = -1
@@ -157,13 +102,98 @@ offset_bottom = 0.0
 metadata/_edit_use_anchors_ = true
 metadata/_edit_lock_ = true
 
-[node name="CIWSIndicatorBorder" type="Sprite2D" parent="."]
-position = Vector2(956, 128)
-scale = Vector2(0.375, 0.375)
-texture = ExtResource("11_qldy5")
+[node name="BonusEligibilityLabel" parent="." instance=ExtResource("10_a3im3")]
+layout_mode = 1
+anchor_left = 0.801215
+anchor_top = 0.114198
+anchor_right = 0.987327
+anchor_bottom = 0.158752
+offset_right = 0.599854
+offset_bottom = -4.8716
+rotation = 0.0226893
+text = "Bonus Eligibility"
+metadata/_edit_use_anchors_ = true
 
-[node name="CIWSIndicator" type="Sprite2D" parent="CIWSIndicatorBorder"]
-position = Vector2(-2.86102e-06, 1.19209e-07)
-scale = Vector2(2, 2)
-texture = ExtResource("6_px255")
-metadata/_edit_lock_ = true
+[node name="MasterWarningLight" parent="." instance=ExtResource("9_7djen")]
+layout_mode = 1
+anchor_left = 0.798611
+anchor_top = 0.197531
+anchor_right = 0.833333
+anchor_bottom = 0.259259
+
+[node name="RedWarningLabel" parent="." instance=ExtResource("10_a3im3")]
+layout_mode = 1
+anchor_left = 0.840278
+anchor_top = 0.212963
+anchor_right = 0.982358
+anchor_bottom = 0.250444
+offset_right = 0.32312
+offset_bottom = -2.28766
+grow_horizontal = 1
+grow_vertical = 1
+rotation = 0.0139626
+text = "Red: Warning!"
+metadata/_edit_use_anchors_ = true
+
+[node name="YellowCautionLabel" parent="." instance=ExtResource("10_a3im3")]
+layout_mode = 1
+anchor_left = 0.8125
+anchor_top = 0.266975
+anchor_right = 0.977794
+anchor_bottom = 0.294778
+offset_right = -0.419189
+offset_bottom = 3.98389
+grow_horizontal = 1
+grow_vertical = 1
+rotation = -0.010472
+text = "Yellow: Caution"
+metadata/_edit_use_anchors_ = true
+
+[node name="GreenAllClearLabel" parent="." instance=ExtResource("10_a3im3")]
+layout_mode = 1
+anchor_left = 0.811632
+anchor_top = 0.316358
+anchor_right = 0.987229
+anchor_bottom = 0.345953
+offset_right = -12.2875
+offset_bottom = 2.82253
+grow_horizontal = 1
+grow_vertical = 1
+rotation = -0.0139626
+text = "Green: All-Clear"
+metadata/_edit_use_anchors_ = true
+
+[node name="CIWSIndicator" parent="." instance=ExtResource("9_7djen")]
+layout_mode = 1
+anchor_left = 0.798611
+anchor_top = 0.419753
+anchor_right = 0.833333
+anchor_bottom = 0.481481
+
+[node name="CIWSLabel" parent="." instance=ExtResource("10_a3im3")]
+layout_mode = 1
+anchor_left = 0.83941
+anchor_top = 0.433642
+anchor_right = 0.960657
+anchor_bottom = 0.471123
+offset_right = 0.32312
+offset_bottom = -2.28766
+grow_horizontal = 1
+grow_vertical = 1
+rotation = 0.0139626
+text = "CIWS Status"
+metadata/_edit_use_anchors_ = true
+
+[node name="UselessIndicator" parent="." instance=ExtResource("9_7djen")]
+layout_mode = 1
+anchor_left = 0.798611
+anchor_top = 0.641975
+anchor_right = 0.833333
+anchor_bottom = 0.703704
+
+[node name="UselessIndicator2" parent="." instance=ExtResource("9_7djen")]
+layout_mode = 1
+anchor_left = 0.798611
+anchor_top = 0.864198
+anchor_right = 0.833333
+anchor_bottom = 0.925926

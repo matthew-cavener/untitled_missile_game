@@ -10,8 +10,6 @@ var salary = 2320
 var max_bonus = 13333 - salary
 var incident_started = false
 var incident_resolved = false
-var incident_resolution_time = 75
-var incident_timer = Timer.new()
 
 var player_ship_tube_1_contents = {
     "type": "decoy",
@@ -250,21 +248,12 @@ Resource expended: " + str(resources_expended),
     }
     return details
 
-func _on_player_ship_hit():
-    if not incident_resolved:
-        incident_timer.queue_free()
-
 func _on_resources_expended(amount: int):
     if incident_started && not incident_resolved:
         resources_expended += amount
 
 func _on_incident_6_begin():
     incident_started = true
-    incident_timer.wait_time = incident_resolution_time
-    incident_timer.one_shot = true
-    incident_timer.timeout.connect(_on_incident_6_resolved)
-    add_child(incident_timer)
-    incident_timer.start()
     var player_ship = player_ship_scene.instantiate()
     var enemy_ship_1 = enemy_ship_scene.instantiate()
     var enemy_ship_2 = enemy_ship_scene.instantiate()
@@ -290,14 +279,12 @@ func _on_incident_6_begin():
 func _on_incident_6_resolved():
     incident_resolved = true
     Events.emit_signal("incident_resolved")
-    Events.emit_signal("incident_6_resolved")
     Events.emit_signal("ciws_available", false)
-    incident_timer.queue_free()
     for child in get_children():
         if child.has_method("set_parameters"):
             child.queue_free()
 
 func _ready():
     Events.connect("incident_6_begin", _on_incident_6_begin)
+    Events.connect("incident_6_resolved", _on_incident_6_resolved)
     Events.connect("resources_expended", _on_resources_expended)
-    Events.connect("player_ship_hit", _on_player_ship_hit)
